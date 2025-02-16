@@ -1,0 +1,16 @@
+TO DO LIST:
+- Make DH Parameters
+- Create functions for DH Parameters
+- Transfer from Cartesian -> Joint space (aka forward and inverse kinematics)
+- Transfer Joint space -> Linear motion on the rails of motors
+
+
+
++-----------+               +-----------+               +-----------+    
+|           |               |           |               |           |
+| Cartesian |   -------->   |   Joint   |   -------->   |   Motor   |
+|   Space   |               |   Space   |               |   Space   |
+|           |               |           |               |           |
++-----------+               +-----------+               +-----------+
+
+
