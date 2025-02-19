@@ -61,14 +61,14 @@
 // @section info
 
 // Author info of this build printed to the host during boot and M115
-#define STRING_CONFIG_H_AUTHOR "(none, default config)" // Original author or contributor.
-//#define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
+#define STRING_CONFIG_H_AUTHOR "Config by Hanjo Claassen" // Original author or contributor.
+#define CUSTOM_VERSION_FILE Version 0.1 // Path from the root directory (no quotes)
 
 // @section machine
 
 // Choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_RAMPS_14_EFB
+  #define MOTHERBOARD BOARD_ESPRESSIF_ESP32
 #endif
 
 // @section serial
@@ -81,7 +81,7 @@
  *
  * :[-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
  */
-#define SERIAL_PORT 0
+#define SERIAL_PORT 1
 
 /**
  * Serial Port Baud Rate
@@ -972,7 +972,7 @@
 //#define BELTPRINTER
 
 // Articulated robot (arm). Joints are directly mapped to axes with no kinematics.
-//#define ARTICULATED_ROBOT_ARM
+#define ARTICULATED_ROBOT_ARM
 
 // For a hot wire cutter with parallel horizontal axes (X, I) where the heights of the two wire
 // ends are controlled by parallel axes (Y, J). Joints are directly mapped to axes (no kinematics).
