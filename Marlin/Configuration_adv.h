@@ -787,7 +787,7 @@
 //#define Z_LATE_ENABLE // Enable Z the last moment. Needed if your Z driver overheats.
 
 // Employ an external closed loop controller. Override pins here if needed.
-#define EXTERNAL_CLOSED_LOOP_CONTROLLER
+//#define EXTERNAL_CLOSED_LOOP_CONTROLLER
 #if ENABLED(EXTERNAL_CLOSED_LOOP_CONTROLLER)
   #define CLOSED_LOOP_ENABLE_PIN        15
   #define CLOSED_LOOP_MOVE_COMPLETE_PIN 2
@@ -2576,8 +2576,8 @@
  *
  * Override the default value based on the driver type set in Configuration.h.
  */
-//#define MINIMUM_STEPPER_POST_DIR_DELAY 650
-//#define MINIMUM_STEPPER_PRE_DIR_DELAY 650
+#define MINIMUM_STEPPER_POST_DIR_DELAY 2000
+#define MINIMUM_STEPPER_PRE_DIR_DELAY 0
 
 /**
  * Minimum stepper driver pulse width (in ns)
@@ -2591,7 +2591,7 @@
  *
  * Override the default value based on the driver type set in Configuration.h.
  */
-//#define MINIMUM_STEPPER_PULSE_NS 2000
+#define MINIMUM_STEPPER_PULSE_NS 1000
 
 /**
  * Maximum stepping rate (in Hz) the stepper driver allows
@@ -2605,7 +2605,7 @@
  *
  * Override the default value based on the driver type set in Configuration.h.
  */
-//#define MAXIMUM_STEPPER_RATE 250000
+#define MAXIMUM_STEPPER_RATE 500000
 
 // @section temperature
 
