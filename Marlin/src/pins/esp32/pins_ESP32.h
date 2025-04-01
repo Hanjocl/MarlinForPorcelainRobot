@@ -34,7 +34,7 @@
 //
 #ifndef I2S_STEPPER_STREAM
   #define I2S_STEPPER_STREAM
-#endif
+#endif 
 #if ENABLED(I2S_STEPPER_STREAM)
   #define I2S_WS                              25
   #define I2S_BCK                             26
@@ -44,26 +44,26 @@
 //
 // Limit Switches
 //
-#define X_MIN_PIN                             34
-#define Y_MIN_PIN                             35
-#define Z_MIN_PIN                             15
+#define X_MIN_PIN                             36
+#define Y_MIN_PIN                             39
+#define Z_MIN_PIN                             34
 
 //
 // Steppers
 //
-#define X_STEP_PIN                           128
-#define X_DIR_PIN                            129
-#define X_ENABLE_PIN                         130
+#define X_STEP_PIN                           21
+#define X_DIR_PIN                            17
+#define X_ENABLE_PIN                         23
 //#define X_CS_PIN                             0
 
-#define Y_STEP_PIN                           131
-#define Y_DIR_PIN                            132
-#define Y_ENABLE_PIN                         133
+#define Y_STEP_PIN                           19
+#define Y_DIR_PIN                            16
+#define Y_ENABLE_PIN                         23
 //#define Y_CS_PIN                            13
 
-#define Z_STEP_PIN                           134
-#define Z_DIR_PIN                            135
-#define Z_ENABLE_PIN                         136
+#define Z_STEP_PIN                           18
+#define Z_DIR_PIN                            4
+#define Z_ENABLE_PIN                         23
 //#define Z_CS_PIN                             5  // SS_PIN
 
 #define E0_STEP_PIN                          137
@@ -74,15 +74,15 @@
 //
 // Temperature Sensors
 //
-#define TEMP_0_PIN                            36  // Analog Input
-#define TEMP_BED_PIN                          39  // Analog Input
+#define TEMP_0_PIN                            138  // Analog Input
+#define TEMP_BED_PIN                          137  // Analog Input
 
 //
 // Heaters / Fans
 //
-#define HEATER_0_PIN                           2
-#define FAN0_PIN                              13
-#define HEATER_BED_PIN                         4
+#define HEATER_0_PIN                          128
+#define FAN0_PIN                              129
+#define HEATER_BED_PIN                        130
 
 // SPI
 #define SD_SS_PIN                              5

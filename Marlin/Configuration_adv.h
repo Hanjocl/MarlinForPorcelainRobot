@@ -933,10 +933,10 @@
 
 //#define SENSORLESS_BACKOFF_MM  { 2, 2, 0 }  // (linear=mm, rotational=°) Backoff from endstops before sensorless homing
 
-#define HOMING_BUMP_MM      { 5, 5, 2 }       // (linear=mm, rotational=°) Backoff from endstops after first bump
+#define HOMING_BUMP_MM      { 2, 2, 2 }       // (linear=mm, rotational=°) Backoff from endstops after first bump
 #define HOMING_BUMP_DIVISOR { 2, 2, 4 }       // Re-Bump Speed Divisor (Divides the Homing Feedrate)
 
-//#define HOMING_BACKOFF_POST_MM { 2, 2, 2 }  // (linear=mm, rotational=°) Backoff from endstops after homing
+#define HOMING_BACKOFF_POST_MM { 4, 4, 4 }  // (linear=mm, rotational=°) Backoff from endstops after homing
 //#define XY_COUNTERPART_BACKOFF_MM 0         // (mm) Backoff X after homing Y, and vice-versa
 
 //#define QUICK_HOME                          // If G28 contains XY do a diagonal move first
@@ -1234,23 +1234,23 @@
 //#define MULTI_NOZZLE_DUPLICATION
 
 // By default stepper drivers require an active-HIGH signal but some high-power drivers require an active-LOW signal to step.
-#define STEP_STATE_X HIGH
-#define STEP_STATE_Y HIGH
-#define STEP_STATE_Z HIGH
+#define STEP_STATE_X LOW
+#define STEP_STATE_Y LOW
+#define STEP_STATE_Z LOW
 #define STEP_STATE_I HIGH
 #define STEP_STATE_J HIGH
 #define STEP_STATE_K HIGH
 #define STEP_STATE_U HIGH
 #define STEP_STATE_V HIGH
 #define STEP_STATE_W HIGH
-#define STEP_STATE_E HIGH
+#define STEP_STATE_E LOW
 
 /**
  * Idle Stepper Shutdown
  * Enable DISABLE_IDLE_* to shut down axis steppers after an idle period.
  * The default timeout duration can be overridden with M18 and M84. Set to 0 for No Timeout.
  */
-#define DEFAULT_STEPPER_TIMEOUT_SEC 120
+#define DEFAULT_STEPPER_TIMEOUT_SEC 0
 #define DISABLE_IDLE_X
 #define DISABLE_IDLE_Y
 #define DISABLE_IDLE_Z    // Disable if the nozzle could fall onto your printed part!
@@ -1402,7 +1402,7 @@
  * vibration and surface artifacts. The algorithm adapts to provide the best possible step smoothing at the
  * lowest stepping frequencies.
  */
-//#define ADAPTIVE_STEP_SMOOTHING
+#define ADAPTIVE_STEP_SMOOTHING
 
 /**
  * Custom Microstepping
@@ -1416,7 +1416,7 @@
 //#define MICROSTEP32 HIGH,LOW,HIGH
 
 // Microstep settings (Requires a board with pins named X_MS1, X_MS2, etc.)
-#define MICROSTEP_MODES { 16, 16, 16, 16, 16, 16 } // [1,2,4,8,16]
+//#define MICROSTEP_MODES { 16, 16, 16, 16, 16, 16 } // [1,2,4,8,16]
 
 /**
  *  @section  stepper motor current
@@ -2577,7 +2577,7 @@
  * Override the default value based on the driver type set in Configuration.h.
  */
 #define MINIMUM_STEPPER_POST_DIR_DELAY 2000
-#define MINIMUM_STEPPER_PRE_DIR_DELAY 0
+#define MINIMUM_STEPPER_PRE_DIR_DELAY 2000
 
 /**
  * Minimum stepper driver pulse width (in ns)
@@ -2591,7 +2591,7 @@
  *
  * Override the default value based on the driver type set in Configuration.h.
  */
-#define MINIMUM_STEPPER_PULSE_NS 1000
+#define MINIMUM_STEPPER_PULSE_NS 1500
 
 /**
  * Maximum stepping rate (in Hz) the stepper driver allows
@@ -2605,7 +2605,7 @@
  *
  * Override the default value based on the driver type set in Configuration.h.
  */
-#define MAXIMUM_STEPPER_RATE 500000
+#define MAXIMUM_STEPPER_RATE 200000
 
 // @section temperature
 
