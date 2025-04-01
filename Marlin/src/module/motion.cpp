@@ -42,6 +42,10 @@
   #include "polar.h"
 #endif
 
+#if ENABLED(ARTICULATED_ROBOT_ARM)
+  #include "robotic_arm.h"
+#endif
+
 #if HAS_BED_PROBE
   #include "probe.h"
 #endif
@@ -996,6 +1000,8 @@ void sync_plan_position() {
 void get_cartesian_from_steppers() {
   #if ENABLED(DELTA)
     forward_kinematics(planner.get_axis_positions_mm());
+  #elif ENABLED(ARTICULATED_ROBOT_ARM)
+    forward_kinematics(planner.get_axis_positions_mm());
   #elif IS_SCARA
     forward_kinematics(
       planner.get_axis_position_degrees(A_AXIS), planner.get_axis_position_degrees(B_AXIS)
@@ -1183,6 +1189,11 @@ void do_blocking_move_to(NUM_AXIS_ARGS_(const_float_t) const_feedRate_t fr_mm_s/
     #if SECONDARY_AXES
       secondary_axis_moves(SECONDARY_AXIS_LIST(i, j, k, u, v, w), fr_mm_s);
     #endif
+
+  #elif ENABLED(ARTICULATED_ROBOT_ARM)
+    
+    if (!position_is_reachable(x, y)) return;
+    destination = current_position;
 
   #elif IS_SCARA
 
@@ -1476,6 +1487,10 @@ void restore_feedrate_and_scaling() {
           refresh_delta_clip_start_height();
         default: break;
       }
+    
+    #elif ENABLED(ARTICULATED_ROBOT_ARM) // Add safty factors later
+      soft_endstop.min[axis] = base_min_pos(axis);
+      soft_endstop.max[axis] = base_max_pos(axis);
 
     #elif HAS_HOTEND_OFFSET
 
