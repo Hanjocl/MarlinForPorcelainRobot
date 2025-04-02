@@ -574,12 +574,12 @@
 #define TEMP_SENSOR_5 0
 #define TEMP_SENSOR_6 0
 #define TEMP_SENSOR_7 0
-#define TEMP_SENSOR_BED 999
+//#define TEMP_SENSOR_BED 999
 //#define TEMP_SENSOR_PROBE 0
-#define TEMP_SENSOR_CHAMBER 0
+//#define TEMP_SENSOR_CHAMBER 0
 //#define TEMP_SENSOR_COOLER 0
 //#define TEMP_SENSOR_BOARD 0
-#define TEMP_SENSOR_SOC 0
+//#define TEMP_SENSOR_SOC 0
 //#define TEMP_SENSOR_REDUNDANT 0
 
 // Dummy thermistor constant temperature readings, for use with 998 and 999
@@ -692,7 +692,7 @@
 //#define MPCTEMP         // See https://marlinfw.org/docs/features/model_predictive_control.html
 
 //#define PID_MAX  255      // Limit hotend current while PID is active (see PID_FUNCTIONAL_RANGE below); 255=full current
-#define PID_K1     0.95   // Smoothing factor within any PID loop
+//#define PID_K1     0.95   // Smoothing factor within any PID loop
 
 #if ENABLED(PIDTEMP)
   //#define PID_DEBUG             // Print PID debug data to the serial port. Use 'M303 D' to toggle activation.
@@ -711,7 +711,7 @@
     #define DEFAULT_Kd 114.00
   #endif
 #else
-  #define BANG_MAX 255    // Limit hotend current while in bang-bang mode; 255=full current
+  //#define BANG_MAX 255    // Limit hotend current while in bang-bang mode; 255=full current
 #endif
 
 /**
@@ -2480,7 +2480,7 @@
 #define PREHEAT_2_TEMP_HOTEND 240
 #define PREHEAT_2_TEMP_BED    110
 #define PREHEAT_2_TEMP_CHAMBER 35
-#define PREHEAT_2_FAN_SPEED     0 // Value from 0 to 255
+//#define PREHEAT_2_FAN_SPEED     0 // Value from 0 to 255
 
 /**
  * @section nozzle park
@@ -2615,7 +2615,7 @@
  *   M76 - Pause the print job timer
  *   M77 - Stop the print job timer
  */
-#define PRINTJOB_TIMER_AUTOSTART
+//#define PRINTJOB_TIMER_AUTOSTART
 
 // @section stats
 
@@ -2842,6 +2842,8 @@
 //========================   (Character-based LCDs)   =========================
 //=============================================================================
 // @section lcd
+
+#define NO_USER_FEEDBACK_WARNING // No LCD is used for this project and warning is annoying.
 
 //
 // RepRapDiscount Smart Controller.

@@ -6,7 +6,7 @@ TO DO LIST:
 
 
 
-+-----------+               +-----------+               +-----------+    
++-----------+               +-----------+               +-----------+
 |           |               |           |               |           |
 | Cartesian |   -------->   |   Joint   |   -------->   |   Motor   |
 |   Space   |               |   Space   |               |   Space   |
@@ -14,3 +14,20 @@ TO DO LIST:
 +-----------+               +-----------+               +-----------+
 
 
+
+TO-DO LIST
+1. Create custom homing sequence
+    A. make all motors home individually and return to the centre of the actuator.
+
+
+2. Adjust cartesian coordiantes to linear actuator (linear axis to angular joints)
+    Input: Joint angle
+    Output: position for the linear actuator
+
+3. Forward kinematics 
+    Input: Joint angles
+    Output: Cartesian Coordiantes 
+
+4. Inverse kinematics based on cartesian coordinates 
+    Input: Cartesian XYZ-coordiantes
+    Output: Joint angles
