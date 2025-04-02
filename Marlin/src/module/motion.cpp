@@ -42,6 +42,10 @@
   #include "polar.h"
 #endif
 
+#if ENABLED(ARTICULATED_ROBOT_ARM)
+  #include "robot_arm.h"
+#endif
+
 #if HAS_BED_PROBE
   #include "probe.h"
 #endif
@@ -202,6 +206,10 @@ inline void report_more_positions() {
   stepper.report_positions();
   TERN_(IS_SCARA, scara_report_positions());
   TERN_(POLAR, polar_report_positions());
+
+  #if ENABLED(ARTICULATED_ROBOT_ARM)
+    robot_arm_report_positions();
+  #endif
 }
 
 // Report the logical position for a given machine position
@@ -893,7 +901,11 @@ void report_current_position_projected() {
           && R2 >= FLOAT_SQ(MIDDLE_DEAD_ZONE_R)
         #endif
       );
+      
+    #elif ENABLED(ARTICULATED_ROBOT_ARM) // TO BE IMPLEMENTED:
 
+      can_reach = 1; // Assumes always reachable
+    
     #elif IS_SCARA
 
       const float R2 = HYPOT2(rx - SCARA_OFFSET_X, ry - SCARA_OFFSET_Y);
@@ -1766,6 +1778,8 @@ float get_move_distance(const xyze_pos_t &diff OPTARG(HAS_ROTATIONAL_AXES, bool 
     #define SCARA_MIN_SEGMENT_LENGTH 0.5f
   #elif ENABLED(POLAR)
     #define POLAR_MIN_SEGMENT_LENGTH 0.5f
+  #elif ENABLED(ARTICULATED_ROBOT_ARM)
+    #define ARTICULATED_ROBOT_ARM_MIN_SEGMENT_LENGTH 0.5F 
   #endif
 
   /**
@@ -1829,6 +1843,8 @@ float get_move_distance(const xyze_pos_t &diff OPTARG(HAS_ROTATIONAL_AXES, bool 
       NOMORE(segments, cartesian_mm * RECIPROCAL(SCARA_MIN_SEGMENT_LENGTH));
     #elif ENABLED(POLAR)
       NOMORE(segments, cartesian_mm * RECIPROCAL(POLAR_MIN_SEGMENT_LENGTH));
+    #elif ENABLED(ARTICULATED_ROBOT_ARM)
+      NOMORE(segments, cartesian_mm * RECIPROCAL(ARTICULATED_ROBOT_ARM_MIN_SEGMENT_LENGTH));
     #endif
 
     // At least one segment is required

@@ -333,6 +333,12 @@ void GcodeSuite::G28() {
 
       home_TPARA();
 
+    #elif ENABLED(ARTICULATED_ROBOT_ARM)
+      
+      constexpr bool doZ = true;
+
+      home_robot_arm();
+
     #else // !DELTA && !AXEL_TPARA
 
       #define _UNSAFE(A) TERN0(Z_SAFE_HOMING, homeZZ && axis_should_home(_AXIS(A)))

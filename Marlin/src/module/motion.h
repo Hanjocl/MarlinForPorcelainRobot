@@ -37,7 +37,11 @@
 #if IS_SCARA
   #include "scara.h"
 #elif ENABLED(POLAR)
-  #include "polar.h"
+  #include "polar.h" 
+#endif
+
+#if ENABLED(ARTICULATED_ROBOT_ARM)
+  #include "robot_arm.h"
 #endif
 
 // Error margin to work around float imprecision

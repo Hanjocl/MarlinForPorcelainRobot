@@ -973,6 +973,9 @@
 
 // Articulated robot (arm). Joints are directly mapped to axes with no kinematics.
 #define ARTICULATED_ROBOT_ARM
+#if ENABLED(ARTICULATED_ROBOT_ARM)
+  #define DEFAULT_SEGMENTS_PER_SECOND 200
+#endif
 
 // For a hot wire cutter with parallel horizontal axes (X, I) where the heights of the two wire
 // ends are controlled by parallel axes (Y, J). Joints are directly mapped to axes (no kinematics).
@@ -1344,7 +1347,7 @@
  * When changing speed and direction, if the difference is less than the
  * value set here, it may happen instantaneously.
  */
-//#define CLASSIC_JERK
+#define CLASSIC_JERK
 #if ENABLED(CLASSIC_JERK)
   #define DEFAULT_XJERK 10.0
   #define DEFAULT_YJERK 10.0
@@ -1386,7 +1389,7 @@
  *
  * See https://github.com/synthetos/TinyG/wiki/Jerk-Controlled-Motion-Explained
  */
-#define S_CURVE_ACCELERATION
+//#define S_CURVE_ACCELERATION
 
 //===========================================================================
 //============================= Z Probe Options =============================

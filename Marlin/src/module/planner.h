@@ -52,6 +52,8 @@
   #include "polargraph.h"
 #elif ENABLED(POLAR)
   #include "polar.h"
+#elif ENABLED(ARTICULATED_ROBOT_ARM)
+    #include "robot_arm.h"
 #endif
 
 #if ABL_PLANAR
@@ -974,7 +976,7 @@ class Planner {
     }
 
     // SCARA AB and Polar YB axes are in degrees, not mm
-    #if ANY(IS_SCARA, POLAR)
+    #if ANY(IS_SCARA, POLAR, ARTICULATED_ROBOT_ARM)
       FORCE_INLINE static float get_axis_position_degrees(const AxisEnum axis) { return get_axis_position_mm(axis); }
     #endif
 

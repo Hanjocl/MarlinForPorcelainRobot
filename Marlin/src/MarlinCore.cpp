@@ -177,6 +177,8 @@
   #include "module/scara.h"
 #elif ENABLED(POLAR)
   #include "module/polar.h"
+#elif ENABLED(ARTICULATED_ROBOT_ARM)
+    #include "module/robot_arm.h"
 #endif
 
 #if HAS_LEVELING
