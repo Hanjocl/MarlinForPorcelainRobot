@@ -1166,6 +1166,39 @@
   #define FEEDRATE_SCALING                  // Convert XY feedrate from mm/s to degrees/s on the fly
 #endif
 
+#if ENABLED(ARTICULATED_ROBOT_ARM)
+  /** 
+   * The joints need to be defined following the DH-parameter rules.
+   * 
+   *  For each joint the following needs to be define:
+   *    - d:      Depth along the previous Z axis to the new Z axis.
+   *    - theta:  Angle about the previous Z axis to align previous X axis with the new X Axis.
+   *    - r:      Length of the common Normal from both Z axis (the radious of ration about the previous Z axis).
+   *    - alpha:  Rotates along the new X Axis to align to new Z axis.  
+  **/
+  // Coordinates for Joint 1
+  #define J1_THETA 0
+  #define J1_ALPHA 0
+  #define J1_D 0
+  #define J1_A 0
+  
+  // Coordinates for Joint 2
+  #define J2_THETA 0
+  #define J2_ALPHA 0
+  #define J2_D 0
+  #define J2_A 0
+
+  // Coordinates for Joint 3
+  #define J3_THETA 0
+  #define J3_ALPHA 0
+  #define J3_D 0
+  #define J3_A 0
+
+  generate_matrices();
+ 
+ 
+#endif
+
 //===========================================================================
 //============================== Endstop Settings ===========================
 //===========================================================================

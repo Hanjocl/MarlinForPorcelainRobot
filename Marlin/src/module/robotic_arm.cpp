@@ -51,7 +51,10 @@
 
 // Initialized by settings.load
 xy_float_t robot_arm[ABC];
-
+xy_float_t joint_1[ABCE];
+xy_float_t joint_2[ABCE];
+xy_float_t joint_3[ABCE];
+xy_float_t joint_4[ABCE];
 
 
 /**
@@ -63,43 +66,22 @@ xy_float_t robot_arm[ABC];
     SERIAL_ECHOLNPGM_P(PSTR("Robotic Arm"), delta.a, SP_B_STR, delta.b, SP_C_STR, delta.c); \
 }while(0)
 
+
+// input two matrices, outputs multiplication of those two matrices 
+void generate_matrices() {
+    joint_1[C_AXIS] = 0;
+}
+
 void inverse_kinematics(const xyz_pos_t &raw) {
 
 }
 
-
-/**
- * Delta Forward Kinematics
- *
- * See the Wikipedia article "Trilateration"
- * https://en.wikipedia.org/wiki/Trilateration
- *
- * Establish a new coordinate system in the plane of the
- * three carriage points. This system has its origin at
- * tower1, with tower2 on the X axis. Tower3 is in the X-Y
- * plane with a Z component of zero.
- * We will define unit vectors in this coordinate system
- * in our original coordinate system. Then when we calculate
- * the Xnew, Ynew and Znew values, we can translate back into
- * the original system by moving along those unit vectors
- * by the corresponding values.
- *
- * Variable names matched to Marlin, c-version, and avoid the
- * use of any vector library.
- *
- * by Andreas Hardtung 2016-06-07
- * based on a Java function from "Delta Robot Kinematics V3"
- * by Steve Graves
- *
- * The result is stored in the cartes[] array.
- */
 void forward_kinematics() {
 
 }
 
 /**
- * A Robot Arm can only safely home ALL axes at one at the time
- * 
+ * A Robot Arm can only safely home one axis at the time
  */
 void home_robotic_arm() {
 
