@@ -333,7 +333,7 @@ void GcodeSuite::G28() {
 
       home_TPARA();
 
-    #elif ENABLED(ARTICULATED_ROBOT_ARM)
+    #elif ENABLED(ROBOT_ARM)
       
       constexpr bool doZ = true;
 

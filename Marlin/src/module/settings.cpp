@@ -4019,8 +4019,10 @@ void MarlinSettings::reset() {
     //
     // Kinematic Settings
     //
-    TERN_(IS_KINEMATIC, gcode.M665_report(forReplay));
-
+    #if IS_KINEMATIC && NOT(ROBOT_ARM)
+      gcode.M665_report(forReplay)    
+    #endif
+    
     //
     // M666 Endstops Adjustment
     //

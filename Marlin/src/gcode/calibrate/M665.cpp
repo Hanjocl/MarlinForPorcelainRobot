@@ -22,7 +22,7 @@
 
 #include "../../inc/MarlinConfig.h"
 
-#if IS_KINEMATIC
+#if IS_KINEMATIC && NOT(ROBOT_ARM)
 
 #include "../gcode.h"
 #include "../../module/motion.h"

@@ -70,7 +70,7 @@ void safe_delay(millis_t ms) {
       TERN_(MARKFORGED_YX,         " MarkForgedYX")
       TERN_(POLAR,                 " Polar")
       TERN_(POLARGRAPH,            " Polargraph")
-      TERN_(ARTICULATED_ROBOT_ARM, " Robot Arm")
+      TERN_(ROBOT_ARM, " Robot Arm")
       TERN_(FOAMCUTTER_XYUV,       " Foam Cutter")
       TERN_(IS_CARTESIAN,          " Cartesian")
     );

@@ -220,7 +220,7 @@
 
 // This defines the number of extruders
 // :[0, 1, 2, 3, 4, 5, 6, 7, 8]
-#define EXTRUDERS 1
+#define EXTRUDERS 0
 
 // Generally expected filament diameter (1.75, 2.85, 3.0, ...). Used for Volumetric, Filament Width Sensor, etc.
 #define DEFAULT_NOMINAL_FILAMENT_DIA 1.75
@@ -972,8 +972,8 @@
 //#define BELTPRINTER
 
 // Articulated robot (arm). Joints are directly mapped to axes with no kinematics.
-#define ARTICULATED_ROBOT_ARM
-#if ENABLED(ARTICULATED_ROBOT_ARM)
+#define ROBOT_ARM
+#if ENABLED(ROBOT_ARM)
   #define DEFAULT_SEGMENTS_PER_SECOND 200
 #endif
 
@@ -1295,7 +1295,7 @@
  * Override with M92 (when enabled below)
  *                                      X, Y, Z [, I [, J [, K...]]], E0 [, E1[, E2...]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   {1600, 1600, 1600, 1600}  // Microstepping 32 (6400 pulse/rev) over a leadscrew of 4mm per rotation => 1600 step/mm
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 1600, 1600, 1600 }  // Microstepping 32 (6400 pulse/rev) over a leadscrew of 4mm per rotation => 1600 step/mm
 
 /**
  * Enable support for M92. Disable to save at least ~530 bytes of flash.
@@ -1307,11 +1307,11 @@
  * Override with M203
  *                                      X, Y, Z [, I [, J [, K...]]], E0 [, E1[, E2...]]
  */
-#define DEFAULT_MAX_FEEDRATE          {50, 50, 50, 50}
+#define DEFAULT_MAX_FEEDRATE          { 50, 50, 50 }
 
 //#define LIMITED_MAX_FR_EDITING        // Limit edit via M203 or LCD to DEFAULT_MAX_FEEDRATE * 2
 #if ENABLED(LIMITED_MAX_FR_EDITING)
-  #define MAX_FEEDRATE_EDIT_VALUES    { 600, 600, 10, 50 } // ...or, set your own edit limits
+  #define MAX_FEEDRATE_EDIT_VALUES    { 600, 600, 10 } // ...or, set your own edit limits
 #endif
 
 /**
@@ -1320,11 +1320,11 @@
  * Override with M201
  *                                      X, Y, Z [, I [, J [, K...]]], E0 [, E1[, E2...]]
  */
-#define DEFAULT_MAX_ACCELERATION      {4, 4, 4, 4}
+#define DEFAULT_MAX_ACCELERATION      {4, 4, 4 }
 
 //#define LIMITED_MAX_ACCEL_EDITING     // Limit edit via M201 or LCD to DEFAULT_MAX_ACCELERATION * 2
 #if ENABLED(LIMITED_MAX_ACCEL_EDITING)
-  #define MAX_ACCEL_EDIT_VALUES       { 6000, 6000, 200, 20000 } // ...or, set your own edit limits
+  #define MAX_ACCEL_EDIT_VALUES       { 6000, 6000, 200 } // ...or, set your own edit limits
 #endif
 
 /**
@@ -1352,7 +1352,7 @@
   #define DEFAULT_XJERK 10.0
   #define DEFAULT_YJERK 10.0
   #define DEFAULT_ZJERK  0.3
-  #define DEFAULT_EJERK  5.0
+  //#define DEFAULT_EJERK  5.0
   //#define DEFAULT_IJERK  0.3
   //#define DEFAULT_JJERK  0.3
   //#define DEFAULT_KJERK  0.3
@@ -1364,7 +1364,7 @@
 
   //#define LIMITED_JERK_EDITING        // Limit edit via M205 or LCD to DEFAULT_aJERK * 2
   #if ENABLED(LIMITED_JERK_EDITING)
-    #define MAX_JERK_EDIT_VALUES { 20, 20, 0.6, 10 } // ...or, set your own edit limits
+    #define MAX_JERK_EDIT_VALUES { 20, 20, 0.6 } // ...or, set your own edit limits
   #endif
 #endif
 

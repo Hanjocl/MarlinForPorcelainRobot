@@ -29,11 +29,9 @@
 
 extern float segments_per_second;
 
-#if ENABLED(ARTICULATED_ROBOT_ARM)
-  void forward_kinematics(const_float_t a, const_float_t b, const_float_t c);
-  void home_robot_arm();
-  
-  void inverse_kinematics(const xyz_pos_t &raw);
-  void robot_arm_set_axis_is_at_home(const AxisEnum axis);
-  void robot_arm_report_positions();
-#endif
+void forward_kinematics(const_float_t a, const_float_t b, const_float_t c);
+void home_robot_arm();
+
+void inverse_kinematics(const xyz_pos_t &raw);
+void robot_arm_set_axis_is_at_home(const AxisEnum axis);
+void robot_arm_report_positions();

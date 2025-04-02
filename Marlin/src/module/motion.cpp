@@ -42,8 +42,8 @@
   #include "polar.h"
 #endif
 
-#if ENABLED(ARTICULATED_ROBOT_ARM)
-  #include "robot_arm.h"
+#if ENABLED(ROBOT_ARM)
+  //#include "robot_arm.h"
 #endif
 
 #if HAS_BED_PROBE
@@ -207,7 +207,7 @@ inline void report_more_positions() {
   TERN_(IS_SCARA, scara_report_positions());
   TERN_(POLAR, polar_report_positions());
 
-  #if ENABLED(ARTICULATED_ROBOT_ARM)
+  #if ENABLED(ROBOT_ARM)
     robot_arm_report_positions();
   #endif
 }
@@ -463,7 +463,7 @@ void report_current_position_projected() {
         #endif
       }
 
-    #elif defined(ARTICULATED_ROBOT_ARM)
+    #elif defined(ROBOT_ARM)
 
       // Articulated Robot Arm
       // Useful?
@@ -709,7 +709,7 @@ void report_current_position_projected() {
         #endif
       }
 
-    #elif ENABLED(ARTICULATED_ROBOT_ARM)
+    #elif ENABLED(ROBOT_ARM)
 
       // Articulated Robot Arm
       // Useful?
@@ -902,7 +902,7 @@ void report_current_position_projected() {
         #endif
       );
       
-    #elif ENABLED(ARTICULATED_ROBOT_ARM) // TO BE IMPLEMENTED:
+    #elif ENABLED(ROBOT_ARM) // TO BE IMPLEMENTED:
 
       can_reach = 1; // Assumes always reachable
     
@@ -1678,7 +1678,7 @@ float get_move_distance(const xyze_pos_t &diff OPTARG(HAS_ROTATIONAL_AXES, bool 
     if (!(NUM_AXIS_GANG(diff.x, || diff.y, /* skip z */, || diff.i, || diff.j, || diff.k, || diff.u, || diff.v, || diff.w)))
       return TERN0(HAS_Z_AXIS, ABS(diff.z));
 
-    #if ENABLED(ARTICULATED_ROBOT_ARM)
+    #if ENABLED(ROBOT_ARM)
 
       // For articulated robots, interpreting feedrate like LinuxCNC would require inverse kinematics. As a workaround, pretend that motors sit on n mutually orthogonal
       // axes and assume that we could think of distance as magnitude of an n-vector in an n-dimensional Euclidian space.
@@ -1778,7 +1778,7 @@ float get_move_distance(const xyze_pos_t &diff OPTARG(HAS_ROTATIONAL_AXES, bool 
     #define SCARA_MIN_SEGMENT_LENGTH 0.5f
   #elif ENABLED(POLAR)
     #define POLAR_MIN_SEGMENT_LENGTH 0.5f
-  #elif ENABLED(ARTICULATED_ROBOT_ARM)
+  #elif ENABLED(ROBOT_ARM)
     #define ARTICULATED_ROBOT_ARM_MIN_SEGMENT_LENGTH 0.5F 
   #endif
 
@@ -1843,7 +1843,7 @@ float get_move_distance(const xyze_pos_t &diff OPTARG(HAS_ROTATIONAL_AXES, bool 
       NOMORE(segments, cartesian_mm * RECIPROCAL(SCARA_MIN_SEGMENT_LENGTH));
     #elif ENABLED(POLAR)
       NOMORE(segments, cartesian_mm * RECIPROCAL(POLAR_MIN_SEGMENT_LENGTH));
-    #elif ENABLED(ARTICULATED_ROBOT_ARM)
+    #elif ENABLED(ROBOT_ARM)
       NOMORE(segments, cartesian_mm * RECIPROCAL(ARTICULATED_ROBOT_ARM_MIN_SEGMENT_LENGTH));
     #endif
 
