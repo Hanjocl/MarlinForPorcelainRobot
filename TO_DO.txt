@@ -16,18 +16,34 @@ TO DO LIST:
 
 
 TO-DO LIST
-1. Create custom homing sequence
-    A. make all motors home individually and return to the centre of the actuator.
+--------------------------------------------------------------------------------------
+[X] 1. Create custom homing sequence - TO BE TESTED
+        A. make all motors home individually and return to the centre of the actuator.
+        
 
+--------------------------------------------------------------------------------------
+[X] 2. Adjust linear actuator to joint angle 
+        Input: linear actuator
+        Output: joint angle
 
-2. Adjust cartesian coordiantes to linear actuator (linear axis to angular joints)
-    Input: Joint angle
-    Output: position for the linear actuator
+--------------------------------------------------------------------------------------
+[X] 3. Adjust joint angle to linear actuator 
+        Input: Joint angle
+        Output: position for the linear actuator
 
-3. Forward kinematics 
-    Input: Joint angles
-    Output: Cartesian Coordiantes 
+--------------------------------------------------------------------------------------
+[ ] 4. Forward kinematics 
+        Input: Joint angles
+        Output: Cartesian Coordiantes 
 
-4. Inverse kinematics based on cartesian coordinates 
-    Input: Cartesian XYZ-coordiantes
-    Output: Joint angles
+--------------------------------------------------------------------------------------
+[ ] 5. Inverse kinematics based on cartesian coordinates 
+        Input: Cartesian XYZ-coordiantes
+        Output: Joint angles
+
+--------------------------------------------------------------------------------------
+[ ] 6. calculate position_is_reachable() for robot arm
+        See implementation at code
+
+--------------------------------------------------------------------------------------
+

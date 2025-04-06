@@ -41,7 +41,7 @@
 #endif
 
 #if ENABLED(ROBOT_ARM)
-  //#include "robot_arm.h"
+  #include "robot_arm.h"
 #endif
 
 // Error margin to work around float imprecision

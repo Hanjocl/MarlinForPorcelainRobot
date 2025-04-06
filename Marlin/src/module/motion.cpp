@@ -902,7 +902,11 @@ void report_current_position_projected() {
         #endif
       );
       
-    #elif ENABLED(ROBOT_ARM) // TO BE IMPLEMENTED:
+    #elif ENABLED(ROBOT_ARM) 
+    
+      // TO BE IMPLEMENTED:
+      // 1. Check distance between 0,0,0 and position. if is in between max and min with elbow bent -> should be reachable
+      // 2. Check if position falls in 45 degree cone from above. If it does -> should be reachable
 
       can_reach = 1; // Assumes always reachable
     
@@ -1017,6 +1021,9 @@ void get_cartesian_from_steppers() {
   #elif ENABLED(POLAR)
     forward_kinematics(planner.get_axis_position_mm(X_AXIS), planner.get_axis_position_degrees(B_AXIS));
     cartes.z = planner.get_axis_position_mm(Z_AXIS);
+  #elif ENABLED(ROBOT_ARM)
+    forward_kinematics(planner.get_axis_position_mm(X_AXIS), planner.get_axis_position_mm(Y_AXIS), 
+    planner.get_axis_position_mm(Z_AXIS));
   #else
     NUM_AXIS_CODE(
       cartes.x = planner.get_axis_position_mm(X_AXIS),

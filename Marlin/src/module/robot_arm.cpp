@@ -38,30 +38,12 @@
 
 float segments_per_second = DEFAULT_SEGMENTS_PER_SECOND;
 
-
-/// Redo motion system: From length to joint angles
-void robot_arm_set_axis_is_at_home(const AxisEnum axis) {
-  if (axis == Z_AXIS)
-    current_position.z = Z_HOME_POS;
-  else {
-    xyz_pos_t homeposition = { X_HOME_POS, Y_HOME_POS, Z_HOME_POS };
-    //DEBUG_ECHOLNPGM_P(PSTR("homeposition X"), homeposition.x, SP_Y_LBL, homeposition.y, SP_Z_LBL, homeposition.z);
-
-    inverse_kinematics(homeposition);
-    forward_kinematics(delta.a, delta.b, delta.c);
-    current_position[axis] = cartes[axis];
-
-    //DEBUG_ECHOLNPGM_P(PSTR("Cartesian X"), current_position.x, SP_Y_LBL, current_position.y);
-    update_software_endstops(axis);
-  }
-}
-
-// Convert ABC inputs in degrees to XYZ outputs in mm
-void forward_kinematics(const_float_t a, const_float_t b, const_float_t c) {
+// Convert joint inputs in degrees to XYZ outputs in mm
+void forward_kinematics(const_float_t j1, const_float_t j2, const_float_t j3) {
 
 }
 
-// Home YZ together, then X (or all at once). Based on quick_home_xy & home_delta
+// Home each axis individually and move it back to centre
 void home_robot_arm() {
   // Init the current position of all carriages to 0,0,0
   current_position.reset();
@@ -86,10 +68,11 @@ void home_robot_arm() {
   // Set the homing current for all motors
   TERN_(HAS_HOMING_CURRENT, set_homing_current(Z_AXIS));
 
-  // Move all axis individually
+  // Move each axis individually
   do_blocking_move_to_x(max_length(X_AXIS), homing_feedrate(X_AXIS));
   endstops.validate_homing_move();
   set_axis_is_at_home(X_AXIS);
+  do_blocking_move_to_x(0, homing_feedrate(X_AXIS));
 
   do_blocking_move_to_y(max_length(Y_AXIS), homing_feedrate(Y_AXIS));
   endstops.validate_homing_move();
@@ -110,17 +93,24 @@ void home_robot_arm() {
   sync_plan_position();
 }
 
+
+/* GOAL: convert raw cartesion XYZ coordinates into 'delta' aka rotation angles for each joint.
+*
+*/
 void inverse_kinematics(const xyz_pos_t &raw) {
 
+    
+  delta.set(raw.x, raw.y, raw.z);
   //SERIAL_ECHOLNPGM(" SCARA (x,y,z) ", spos.x , ",", spos.y, ",", spos.z, " Rho=", RHO, " Rho2=", RHO2, " Theta=", THETA, " Phi=", PHI, " Psi=", PSI, " Gamma=", GAMMA);
 }
 
 
+
 void robot_arm_report_positions() {
   SERIAL_ECHOLNPGM(
-    "Joint 1:", planner.get_axis_position_degrees(A_AXIS)
-  , "  Joint 2:", planner.get_axis_position_degrees(B_AXIS)
-  , "  Joint 3:", planner.get_axis_position_degrees(C_AXIS)
+    "Joint 1:", planner.get_axis_position_mm(A_AXIS)
+  , "  Joint 2:", planner.get_axis_position_mm(B_AXIS)
+  , "  Joint 3:", planner.get_axis_position_mm(C_AXIS)
   );
 }
 

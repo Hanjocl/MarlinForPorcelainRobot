@@ -975,6 +975,19 @@
 #define ROBOT_ARM
 #if ENABLED(ROBOT_ARM)
   #define DEFAULT_SEGMENTS_PER_SECOND 200
+  
+  // A joint is defined by the DH-parameters. 
+  // Angles should be given in degrees. 
+  // Radius and distance should be given in mm.
+  // 
+  //                {theta, radius, distance, alpha} 
+  #define JOINTS { {0,0,0,0} , {0,0,0,0} , {0,0,0,0} }
+  
+  
+  // Highly specifc functions for robot I am working on...
+  #define JOINT_RADIUS 302.58 / 2 // in mm
+  #define JOINT_OFFSET  2* 33.6166 // in Degrees
+  #define DISTANCE_OFFSET 252 // in mm
 #endif
 
 // For a hot wire cutter with parallel horizontal axes (X, I) where the heights of the two wire
@@ -1885,15 +1898,15 @@
 
 // The size of the printable area
 #define X_BED_SIZE 150
-//#define Y_BED_SIZE 200
+#define Y_BED_SIZE X_BED_SIZE
 
 // Travel limits (linear=mm, rotational=°) after homing, corresponding to endstop positions.
-#define X_MIN_POS 0
-#define Y_MIN_POS 0
-#define Z_MIN_POS 0
-#define X_MAX_POS 150
-#define Y_MAX_POS 150
-#define Z_MAX_POS 150
+#define X_MIN_POS -75
+#define Y_MIN_POS -75
+#define Z_MIN_POS -75
+#define X_MAX_POS 75
+#define Y_MAX_POS 75
+#define Z_MAX_POS 75
 //#define I_MIN_POS 0
 //#define I_MAX_POS 50
 //#define J_MIN_POS 0
@@ -2325,9 +2338,9 @@
 
 // Manually set the home position. Leave these undefined for automatic settings.
 // For DELTA this is the top-center of the Cartesian print volume.
-//#define MANUAL_X_HOME_POS 0
-//#define MANUAL_Y_HOME_POS 0
-//#define MANUAL_Z_HOME_POS 0
+#define MANUAL_X_HOME_POS 0
+#define MANUAL_Y_HOME_POS 0
+#define MANUAL_Z_HOME_POS 0
 //#define MANUAL_I_HOME_POS 0
 //#define MANUAL_J_HOME_POS 0
 //#define MANUAL_K_HOME_POS 0
@@ -2351,7 +2364,7 @@
 #endif
 
 // Homing speeds (linear=mm/min, rotational=°/min)
-#define HOMING_FEEDRATE_MM_M { (1*60), (1*60), (1*60) }
+#define HOMING_FEEDRATE_MM_M { (0.5*60), (0.5*60), (0.5*60) }
 
 // Edit homing feedrates with M210 and MarlinUI menu items
 //#define EDITABLE_HOMING_FEEDRATE
