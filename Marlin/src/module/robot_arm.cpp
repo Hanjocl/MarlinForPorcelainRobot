@@ -38,6 +38,13 @@
 
 float segments_per_second = DEFAULT_SEGMENTS_PER_SECOND;
 
+// Populate array based on JOINTS define in configuration.h
+constexpr float joint_arr[][4] = JOINTS;
+const int N_joint = COUNT(joint_arr);
+
+// Define joints in easy useable form.
+DHParameters<N_joint> dh_para = joint_arr;
+
 // Convert joint inputs in degrees to XYZ outputs in mm
 void forward_kinematics(const_float_t j1, const_float_t j2, const_float_t j3) {
 
@@ -112,6 +119,47 @@ void robot_arm_report_positions() {
   , "  Joint 2:", planner.get_axis_position_mm(B_AXIS)
   , "  Joint 3:", planner.get_axis_position_mm(C_AXIS)
   );
+}
+
+
+/*
+*  Input an angle for a joint and converts it based on parameters to linear actuator position.
+*  These are highly specific functions. That is only needed for my usecase probably
+*  (Kinda of a post-processor for the inverse kinematics)
+*/ 
+float angle_to_position(const_float_t joint_angle, const_float_t radius) {    
+  // Add offsets and get angle that is important
+  float angle = ABS(joint_angle) + JOINT_OFFSET;
+  angle = 180 - angle;
+
+  // convert theta to distance 
+  float position = 2 * radius * sin(RADIANS(angle/2));
+
+  // Depending on if angle is positive or negative return right result
+  if (joint_angle > 0) {
+      return position - DISTANCE_OFFSET;
+  } else {
+      return -position + DISTANCE_OFFSET;
+  }
+}
+
+/*
+*  Input position of linear actuator and converts it based on parameters to angle of joint.
+*  These are highly specific functions. That is only needed for my usecase probably
+*  (Kinda of a post-processor for the inverse kinematics function)
+*/ 
+float position_to_angle(const_float_t position, const_float_t radius) {    
+  // Adjust position based on offset at zero
+  float adj_distance = DISTANCE_OFFSET - ABS(position);
+
+  // Solve for angle (distance = 2 * radius * sin(angle / 2))
+  float angle_radians = asin(adj_distance / (2 * radius));
+  float angle = DEGREES(angle_radians) *2;
+  
+  // Adjust the angle by the JOINT_OFFSET and keep what is left over as current angle
+  angle = 180.0f - JOINT_OFFSET - angle ;
+  
+  return angle;
 }
 
 #endif // ROBOT_ARM
