@@ -25,7 +25,7 @@
 #include "../inc/MarlinConfigPre.h"
 #include "../core/utility.h"
 
-#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+//#pragma GCC diagnostic ignored "-Wimplicit-fallthrough" // OCD thing. I don't want to see any yellow text when I build. Not sure if it does anything tho
 
 constexpr char DIGIT(const uint8_t n) { return '0' + n; }
 
