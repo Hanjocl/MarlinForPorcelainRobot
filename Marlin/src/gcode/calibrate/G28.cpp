@@ -335,9 +335,17 @@ void GcodeSuite::G28() {
 
     #elif ENABLED(ROBOT_ARM)
       
-      constexpr bool doZ = true;
+      const bool doX = parser.seen_test('X');
+      const bool doY = parser.seen_test('Y');
+      const bool doZ = parser.seen_test('Z');
+      const bool home_all = !doX && !doY && !doZ;
 
-      home_robot_arm();
+      if (home_all) {
+        home_robot_arm(true, true, true);
+      } else {
+        home_robot_arm(doX, doY, doZ);
+      }
+      
 
     #else // !DELTA && !AXEL_TPARA
 

@@ -61,7 +61,7 @@ extern float segments_per_second;
 void forward_kinematics(const_float_t a, const_float_t b, const_float_t c);
 void inverse_kinematics(const xyz_pos_t &raw);
 
-void home_robot_arm();
+void home_robot_arm(bool doX, bool doY, bool doZ);
 
 void robot_arm_report_positions();
 

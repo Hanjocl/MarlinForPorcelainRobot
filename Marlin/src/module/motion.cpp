@@ -206,10 +206,7 @@ inline void report_more_positions() {
   stepper.report_positions();
   TERN_(IS_SCARA, scara_report_positions());
   TERN_(POLAR, polar_report_positions());
-
-  #if ENABLED(ROBOT_ARM)
-    robot_arm_report_positions();
-  #endif
+  TERN_(ROBOT_ARM, robot_arm_report_positions());
 }
 
 // Report the logical position for a given machine position

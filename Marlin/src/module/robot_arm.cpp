@@ -45,18 +45,14 @@ const int N_joint = COUNT(joint_arr);
 // Define joints in easy useable form.
 DHParameters<N_joint> dh_para = joint_arr;
 
-// Convert joint inputs in degrees to XYZ outputs in mm
-void forward_kinematics(const_float_t j1, const_float_t j2, const_float_t j3) {
-
-}
 
 // Home each axis individually and move it back to centre
-void home_robot_arm() {
+void home_robot_arm(bool doX, bool doY, bool doZ) {
   // Init the current position of all carriages to 0,0,0
   current_position.reset();
   destination.reset();
   sync_plan_position();
-
+  
   // Disable stealthChop if used. Enable diag1 pin on driver.
   #if ENABLED(SENSORLESS_HOMING)
     TERN_(X_SENSORLESS, sensorless_t stealth_states_x = start_sensorless_homing_per_axis(X_AXIS));
@@ -76,18 +72,18 @@ void home_robot_arm() {
   TERN_(HAS_HOMING_CURRENT, set_homing_current(Z_AXIS));
 
   // Move each axis individually
-  do_blocking_move_to_x(max_length(X_AXIS), homing_feedrate(X_AXIS));
-  endstops.validate_homing_move();
-  set_axis_is_at_home(X_AXIS);
-  do_blocking_move_to_x(0, homing_feedrate(X_AXIS));
-
-  do_blocking_move_to_y(max_length(Y_AXIS), homing_feedrate(Y_AXIS));
-  endstops.validate_homing_move();
-  set_axis_is_at_home(Y_AXIS);
-
-  do_blocking_move_to_z(max_length(Z_AXIS), homing_feedrate(Z_AXIS));
-  endstops.validate_homing_move();
-  set_axis_is_at_home(Z_AXIS);
+  if (doX) {
+    homeaxis(X_AXIS);
+    set_axis_is_at_home(X_AXIS);
+  }
+  if (doY) {
+    homeaxis(Y_AXIS);
+    set_axis_is_at_home(Y_AXIS);
+  }
+  if (doZ) {
+    homeaxis(Z_AXIS);
+    set_axis_is_at_home(Z_AXIS);
+  }
 
 
   // Re-enable stealthChop if used. Disable diag1 pin on driver.
@@ -101,10 +97,22 @@ void home_robot_arm() {
 }
 
 
+// Convert joint inputs in degrees to XYZ outputs in mm
+void forward_kinematics(const_float_t j1, const_float_t j2, const_float_t j3) {
+  cartes.set(j1, j2, j3);
+}
+
+
 /* GOAL: convert raw cartesion XYZ coordinates into 'delta' aka rotation angles for each joint.
 *
 */
 void inverse_kinematics(const xyz_pos_t &raw) {
+  
+  // Find distance between org and given point in 3d space: √((x2-x1)^2+(y2-y1)^2+(z2-z1)^2)
+  // X1, y1, and z1 are always 0 -> √((x2)^2+(y2)^2+(z2)^2)
+  //const float distance = SQRT(sq(raw.x) + sq(raw.y) + sq(raw.z));
+
+
 
     
   delta.set(raw.x, raw.y, raw.z);
