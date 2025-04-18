@@ -67,12 +67,6 @@
 #define Z_STEP_PIN                           18
 #define Z_DIR_PIN                            4
 #define Z_ENABLE_PIN                         23
-//#define Z_CS_PIN                             5  // SS_PIN
-
-#define E0_STEP_PIN                          137
-#define E0_DIR_PIN                           138
-#define E0_ENABLE_PIN                        139
-//#define E0_CS_PIN                           21
 
 //
 // Temperature Sensors

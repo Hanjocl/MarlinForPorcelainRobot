@@ -30,8 +30,7 @@
 
 #include "robot_arm.h"
 
-//#include "../inc/MarlinConfig.h"
-//#include "../MarlinCore.h"
+#include "../MarlinCore.h"
 #include "motion.h"
 #include "planner.h"
 #include "endstops.h"
