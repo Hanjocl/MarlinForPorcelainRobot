@@ -2995,6 +2995,14 @@ void prepare_line_to_destination() {
         do_homing_move(axis, adjDistance, get_homing_bump_feedrate(axis));
       }
 
+    #elif ENABLED(ROBOT_ARM)
+      set_axis_is_at_home(axis);
+      sync_plan_position();
+
+      destination[axis] = current_position[axis];
+
+      if (DEBUGGING(LEVELING)) DEBUG_POS("> AFTER set_axis_is_at_home", current_position);
+
     #else // CARTESIAN / CORE / MARKFORGED_XY / MARKFORGED_YX
 
       set_axis_is_at_home(axis);
@@ -3013,11 +3021,19 @@ void prepare_line_to_destination() {
     // Put away the Z probe. Return early if it fails.
     if (TERN0(HOMING_Z_WITH_PROBE, axis == Z_AXIS && probe.stow())) return;
 
-    #if DISABLED(DELTA) && defined(HOMING_BACKOFF_POST_MM)
+    #if DISABLED(DELTA)  && DISABLED(ROBTO_ARM) && defined(HOMING_BACKOFF_POST_MM)
       const xyz_float_t endstop_backoff = HOMING_BACKOFF_POST_MM;
-      if (endstop_backoff[axis]) {
-        current_position[axis] -= ABS(endstop_backoff[axis]) * axis_home_dir;
-        line_to_current_position(TERN_(HOMING_Z_WITH_PROBE, (axis == Z_AXIS) ? z_probe_fast_mm_s :) homing_feedrate(axis));
+      if (endstop_backoff[axis]) {    
+        // Get the ABC or XYZ positions in mm
+        abce_pos_t target = planner.get_axis_positions_mm();
+        
+        target[axis] = 0;
+        planner.set_machine_position_mm(target);  // Update the machine position
+        
+        target[axis]-= ABS(endstop_backoff[axis]) * axis_home_dir; // Set move to backoff distance
+        const feedRate_t backoff_feedrate = TERN_(HOMING_Z_WITH_PROBE, (axis == Z_AXIS) ? z_probe_fast_mm_s :) planner.settings.max_feedrate_mm_s[axis];
+        planner.buffer_segment(target, backoff_feedrate);
+        planner.synchronize();
 
         #if ENABLED(SENSORLESS_HOMING)
           planner.synchronize();

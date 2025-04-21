@@ -70,7 +70,7 @@
   #undef HOTEND_OVERSHOOT
   #undef DISABLE_E
   #undef PREVENT_LENGTHY_EXTRUDE
-  #undef FILAMENT_RUNOUT_SENSOR
+  //#undef FILAMENT_RUNOUT_SENSOR  // Needed for extra endstop pin to checck if arm destroys itself (can only define 1 without erros)
   #undef FILAMENT_RUNOUT_DISTANCE_MM
   #undef DISABLE_OTHER_EXTRUDERS
 #endif

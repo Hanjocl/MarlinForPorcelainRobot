@@ -114,7 +114,7 @@ void inverse_kinematics(const xyz_pos_t &raw) {
 
 
     
-  delta.set(raw.x, raw.y, raw.z);
+  delta.set(0.5*raw.x, 0.5*raw.y, 0.5*raw.z);
   //SERIAL_ECHOLNPGM(" SCARA (x,y,z) ", spos.x , ",", spos.y, ",", spos.z, " Rho=", RHO, " Rho2=", RHO2, " Theta=", THETA, " Phi=", PHI, " Psi=", PSI, " Gamma=", GAMMA);
 }
 
