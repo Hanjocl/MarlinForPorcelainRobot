@@ -565,10 +565,21 @@ void home_if_needed(const bool keeplev=false);
  */
 #if IS_KINEMATIC // (DELTA or SCARA)
 
+  
+
   #if HAS_SCARA_OFFSET
     extern abc_pos_t scara_home_offset; // A and B angular offsets, Z mm offset
   #endif
 
+  #if ENABLED(ROBOT_ARM)
+    // Return true if the given point is within the printable area
+    bool position_is_reachable(const_float_t rx, const_float_t ry, const_float_t rz, const float inset=0);
+
+    inline bool position_is_reachable(const xyz_pos_t &pos, const float inset=0) {
+      return position_is_reachable(pos.x, pos.y, pos.z, inset);
+    }
+  #else
+  
   // Return true if the given point is within the printable area
   bool position_is_reachable(const_float_t rx, const_float_t ry, const float inset=0);
 
@@ -576,6 +587,7 @@ void home_if_needed(const bool keeplev=false);
     return position_is_reachable(pos.x, pos.y, inset);
   }
 
+  #endif
 #else
 
   // Return true if the given position is within the machine bounds.

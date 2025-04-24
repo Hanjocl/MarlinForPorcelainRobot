@@ -145,6 +145,7 @@ void event_filament_runout(const uint8_t extruder) {
         queue.inject(F(FILAMENT_RUNOUT_SCRIPT));         
         
       #endif
+      
       kill();                                       /// Custom command to excute on Switch
     }
   #endif

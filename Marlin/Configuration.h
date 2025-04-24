@@ -974,21 +974,24 @@
 // Articulated robot (arm). Joints are directly mapped to axes with no kinematics.
 #define ROBOT_ARM
 #if ENABLED(ROBOT_ARM)
-  #define DEFAULT_SEGMENTS_PER_SECOND 200
+  #define DEFAULT_SEGMENTS_PER_SECOND 100
   
   // A joint is defined by the DH-parameters. 
   // Angles should be given in degrees. 
   // Radius and distance should be given in mm.
-  // 
-  //                {theta, radius, distance, alpha} 
-  #define JOINTS { {0,0,0,0} , {0,0,0,0} , {0,0,0,0} }
-  #define TOOL_OFFSET {0,0,0,0}
+  // Each joint must be defined as {theta, d, a, alpha}
+  //                 
+  #define JOINTS { {0,0,0,RADIANS(90)} , {RADIANS(-90),0,0,RADIANS(-90)} , {0,0,100,0}, {0,0,100,0} }
   
   
   // Highly specifc functions for robot I am working on...
-  #define JOINT_RADIUS 302.58 / 2 // in mm
-  #define JOINT_OFFSET  2* 33.6166 // in Degrees
-  #define DISTANCE_OFFSET 252 // in mm
+  #define JOINT_RADIUS 302.58 / 2 // in mm                  // Used to calculate position & Angle
+  #define JOINT_ANGLE_OFFSET  2* 33.6166 // in Degrees      // Used to calculate position & Angle
+  #define DISTANCE_OFFSET 252 // in mm                      // Used to calculate position & Angle
+  #define MAX_DISTANCE 200                                  // used to in method position_is_reachable()
+  #define MIN_DISTANCE 185                                  // used to in method position_is_reachable()
+  #define MAX_AXIS_TRAVEL 75                                // used in angle_to_position()
+  #define MIN_AXIS_TRAVEL -75                               // used in angle_to_position()
 #endif
 
 // For a hot wire cutter with parallel horizontal axes (X, I) where the heights of the two wire
@@ -1321,11 +1324,11 @@
  * Override with M203
  *                                      X, Y, Z [, I [, J [, K...]]], E0 [, E1[, E2...]]
  */
-#define DEFAULT_MAX_FEEDRATE          { 10, 10, 10}
+#define DEFAULT_MAX_FEEDRATE          { 6, 6, 6}
 
-//#define LIMITED_MAX_FR_EDITING        // Limit edit via M203 or LCD to DEFAULT_MAX_FEEDRATE * 2
+#define LIMITED_MAX_FR_EDITING        // Limit edit via M203 or LCD to DEFAULT_MAX_FEEDRATE * 2
 #if ENABLED(LIMITED_MAX_FR_EDITING)
-  #define MAX_FEEDRATE_EDIT_VALUES    { 600, 600, 10 } // ...or, set your own edit limits
+  #define MAX_FEEDRATE_EDIT_VALUES    { 8, 8, 8 } // ...or, set your own edit limits
 #endif
 
 /**
@@ -1860,7 +1863,7 @@
  */
 //#define Z_IDLE_HEIGHT Z_HOME_POS
 
-//#define Z_CLEARANCE_FOR_HOMING  4   // (mm) Minimal Z height before homing (G28) for Z clearance above the bed, clamps, ...
+#define Z_CLEARANCE_FOR_HOMING  -200   // (mm) Minimal Z height before homing (G28) for Z clearance above the bed, clamps, ...
                                       // You'll need this much clearance above Z_MAX_POS to avoid grinding.
 
 //#define Z_AFTER_HOMING         10   // (mm) Height to move to after homing (if Z was homed)
@@ -1898,16 +1901,16 @@
 // @section geometry
 
 // The size of the printable area
-#define X_BED_SIZE 150
-#define Y_BED_SIZE X_BED_SIZE
+//#define X_BED_SIZE 150
+//#define Y_BED_SIZE X_BED_SIZE
 
 // Travel limits (linear=mm, rotational=°) after homing, corresponding to endstop positions.
-#define X_MIN_POS -75
-#define Y_MIN_POS -75
-#define Z_MIN_POS -75
-#define X_MAX_POS 75
-#define Y_MAX_POS 75
-#define Z_MAX_POS 75
+#define X_MIN_POS -200
+#define X_MAX_POS 200
+#define Y_MIN_POS -200
+#define Y_MAX_POS 200
+#define Z_MIN_POS -200
+#define Z_MAX_POS -150
 //#define I_MIN_POS 0
 //#define I_MAX_POS 50
 //#define J_MIN_POS 0
@@ -2024,7 +2027,7 @@
   // Commands to execute on filament runout.
   // With multiple runout sensors use the %c placeholder for the current tool in commands (e.g., "M600 T%c")
   // NOTE: After 'M412 H1' the host handles filament runout and this script does not apply.
-  #define FILAMENT_RUNOUT_SCRIPT ""
+  #define FILAMENT_RUNOUT_SCRIPT "M112"
 
   // After a runout is detected, continue printing this length of filament
   // before executing the runout script. Useful for a sensor at the end of
@@ -2340,8 +2343,8 @@
 // Manually set the home position. Leave these undefined for automatic settings.
 // For DELTA this is the top-center of the Cartesian print volume.
 #define MANUAL_X_HOME_POS 0
-#define MANUAL_Y_HOME_POS 0
-#define MANUAL_Z_HOME_POS 0
+#define MANUAL_Y_HOME_POS 0               /// TO DO: INTEGRATE FORWARD KINEMATIC CALL TO GET HOME POINT
+#define MANUAL_Z_HOME_POS -200
 //#define MANUAL_I_HOME_POS 0
 //#define MANUAL_J_HOME_POS 0
 //#define MANUAL_K_HOME_POS 0
@@ -2365,7 +2368,7 @@
 #endif
 
 // Homing speeds (linear=mm/min, rotational=°/min)
-#define HOMING_FEEDRATE_MM_M { (2*60), (2*60), (2*60) }
+#define HOMING_FEEDRATE_MM_M { (6*60), (6*60), (6*60) }
 
 // Edit homing feedrates with M210 and MarlinUI menu items
 //#define EDITABLE_HOMING_FEEDRATE

@@ -881,7 +881,7 @@ void report_current_position_projected() {
 
 #if IS_KINEMATIC
 
-  bool position_is_reachable(const_float_t rx, const_float_t ry, const float inset/*=0*/) {
+  bool position_is_reachable(const_float_t rx, const_float_t ry, const_float_t rz, const float inset/*=0*/) {
 
     bool can_reach;
 
@@ -904,8 +904,12 @@ void report_current_position_projected() {
       // TO BE IMPLEMENTED:
       // 1. Check distance between 0,0,0 and position. if is in between max and min with elbow bent -> should be reachable
       // 2. Check if position falls in 45 degree cone from above. If it does -> should be reachable
+      const float distance = SQRT(sq(rx) + sq(ry) + sq(rz));
 
-      can_reach = 1; // Assumes always reachable
+      SERIAL_ECHOLNPGM("Can Reach distance:", distance);
+
+      can_reach = (MIN_DISTANCE <= distance) && (distance <= MAX_DISTANCE);      
+      SERIAL_ECHOLNPGM("Can Reach Target:", can_reach);
     
     #elif IS_SCARA
 
@@ -1157,7 +1161,7 @@ void do_blocking_move_to(NUM_AXIS_ARGS_(const_float_t) const_feedRate_t fr_mm_s/
 
   #if IS_KINEMATIC && DISABLED(POLARGRAPH)
     // kinematic machines are expected to home to a point 1.5x their range? never reachable.
-    if (!position_is_reachable(x, y)) return;
+    if (!position_is_reachable(x, y, z)) return;
     destination = current_position;          // sync destination at the start
   #endif
 
@@ -1542,6 +1546,8 @@ void restore_feedrate_and_scaling() {
         // POLARGRAPH uses draw_area_* below...
       #elif ENABLED(POLAR)
         // For now, we don't limit POLAR
+      #elif ENABLED(ROBOT_ARM)
+        // Do get stuff for now
       #else
         // SCARA needs to consider the angle of the arm through the entire move, so for now use no tool offset.
         constexpr xy_pos_t offs{0};
@@ -1552,6 +1558,28 @@ void restore_feedrate_and_scaling() {
         LIMIT(target.y, draw_area_min.y, draw_area_max.y);
       #elif ENABLED(POLAR)
         // Motion limits are as same as cartesian limits.
+      #elif ENABLED(ROBOT_ARM)
+          #if HAS_X_AXIS
+          if (axis_was_homed(X_AXIS)) {
+            #if !HAS_SOFTWARE_ENDSTOPS || ENABLED(MIN_SOFTWARE_ENDSTOP_X)
+              NOLESS(target.x, soft_endstop.min.x);
+            #endif
+            #if !HAS_SOFTWARE_ENDSTOPS || ENABLED(MAX_SOFTWARE_ENDSTOP_X)
+              NOMORE(target.x, soft_endstop.max.x);
+            #endif
+          }
+        #endif
+
+        #if HAS_Y_AXIS
+          if (axis_was_homed(Y_AXIS)) {
+            #if !HAS_SOFTWARE_ENDSTOPS || ENABLED(MIN_SOFTWARE_ENDSTOP_Y)
+              NOLESS(target.y, soft_endstop.min.y);
+            #endif
+            #if !HAS_SOFTWARE_ENDSTOPS || ENABLED(MAX_SOFTWARE_ENDSTOP_Y)
+              NOMORE(target.y, soft_endstop.max.y);
+            #endif
+          }
+        #endif
       #else
         if (TERN1(IS_SCARA, axis_was_homed(X_AXIS) && axis_was_homed(Y_AXIS))) {
           const float dist_2 = HYPOT2(target.x - offs.x, target.y - offs.y);

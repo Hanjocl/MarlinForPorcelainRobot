@@ -27,11 +27,14 @@
 
 #include "../core/types.h"
 
+#include "../../lib/BasicLinearAlgebra-master/BasicLinearAlgebra.h"
+using namespace BLA;
+
 // Template to populate with array defined in configuration.h
 struct JOINT {
     float theta;
-    float r;
     float d;
+    float a;
     float alpha;
 };
 
@@ -43,27 +46,33 @@ struct JOINT {
  */
 template <int SIZE>
 struct DHParameters {  
-    JOINT joint[SIZE];
+    JOINT joints[SIZE];
 
     DHParameters(const float arr[SIZE][4]) {
-        for (int i = 0; i < 3; ++i) {
-            joint[i].theta = arr[i][0];
-            joint[i].r = arr[i][1];
-            joint[i].d = arr[i][2];
-            joint[i].alpha = arr[i][3];
+        for (int i = 0; i < SIZE; ++i) {
+            joints[i].theta = arr[i][0];
+            joints[i].d = arr[i][1];
+            joints[i].a = arr[i][2];
+            joints[i].alpha = arr[i][3];
         }
     }
 };
 
 
 extern float segments_per_second;
+constexpr float joint_arr[][4] = JOINTS;
+const int N_joint = COUNT(joint_arr);
+// Define joints in easy useable form.
+const DHParameters<N_joint> dh_para_ref = joint_arr;
 
 void forward_kinematics(const_float_t a, const_float_t b, const_float_t c);
+BLA::Matrix<4,4> dh_transform(JOINT& j);
+
 void inverse_kinematics(const xyz_pos_t &raw);
 
 void home_robot_arm(bool doX, bool doY, bool doZ);
 
 void robot_arm_report_positions();
 
-float angle_to_position(const_float_t joint_angle, const_float_t radius);
-float position_to_angle(const_float_t position, const_float_t radius);
+float angle_to_position(const_float_t joint_angle);
+float position_to_angle(const_float_t position);
