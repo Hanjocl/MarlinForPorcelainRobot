@@ -129,7 +129,7 @@ void forward_kinematics(const_float_t pos_m1, const_float_t pos_m2, const_float_
   const float pos_z = temp_matrix(2, 3);
 
   cartes.set(pos_x, pos_y, pos_z);
-  SERIAL_ECHOLNPGM("Position (FW_K) is x:", pos_x,"Y:", pos_y, " Z:", pos_z);
+  //SERIAL_ECHOLNPGM("Position (FW_K) is x:", pos_x,"Y:", pos_y, " Z:", pos_z);
 }
 
 BLA::Matrix<4,4> dh_transform(JOINT& j) {
@@ -158,8 +158,8 @@ BLA::Matrix<4,4> dh_transform(JOINT& j) {
 *
 */
 void inverse_kinematics(const xyz_pos_t &target) {
-  SERIAL_ECHOLNPGM("-------------------------------------");
-  SERIAL_ECHOLNPGM("(IV_K) |Target is x:", target.x,"Y:", target.y, " Z:", target.z);
+  //SERIAL_ECHOLNPGM("-------------------------------------");
+  //SERIAL_ECHOLNPGM("(IV_K) |Target is x:", target.x,"Y:", target.y, " Z:", target.z);
   
   // Store calculated angle in here
   float joint_1 = 0;
@@ -168,7 +168,7 @@ void inverse_kinematics(const xyz_pos_t &target) {
   
   // STEP 1:  Find distance between org and given point in 3d space: √((x2-x1)^2+(y2-y1)^2+(z2-z1)^2)
   const float distance = SQRT(sq(target.x) + sq(target.y) + sq(target.z));
-  SERIAL_ECHOLNPGM("(IV_K) | Target Distance is x:", distance);
+  //SERIAL_ECHOLNPGM("(IV_K) | Target Distance is x:", distance);
 
   // STEP 2:  Get angle for Joint 3
   //          Calculates the angle for given distances
@@ -176,7 +176,7 @@ void inverse_kinematics(const xyz_pos_t &target) {
   //LIMIT(cos_angle, -1, 1); // Make sure cos is not going out of bound
   joint_3 = RADIANS(180) - ACOS(cos_angle);
 
-  SERIAL_ECHOLNPGM("(IV_K) | Joint 2 a:", dh_para_ref.joints[2].a, "Joint 3 a:",dh_para_ref.joints[3].a);
+  //SERIAL_ECHOLNPGM("(IV_K) | Joint 2 a:", dh_para_ref.joints[2].a, "Joint 3 a:",dh_para_ref.joints[3].a);
 
   // STEP 3:  Do forwared kinematics to get the end position of the arm with only joint 3 turned
   DHParameters<N_joint> dh_para_cal = dh_para_ref;
@@ -195,7 +195,7 @@ void inverse_kinematics(const xyz_pos_t &target) {
 
   // STEP 4:  Get working end position of the arm == temporay vector of arm
   const xyz_pos_t temp_pos = { temp_matrix(0, 3), temp_matrix(1, 3), temp_matrix(2, 3) };
-  SERIAL_ECHOLNPGM("(IV_K) | Temp Target is X:", temp_pos[0], " Y:", temp_pos[1], " Z:", temp_pos[2]);
+  //SERIAL_ECHOLNPGM("(IV_K) | Temp Target is X:", temp_pos[0], " Y:", temp_pos[1], " Z:", temp_pos[2]);
 
   // STEP 5:  Get vector to rotate X and Y axis based on temp vector and target position
   const float magnitude_temp = SQRT(sq(temp_pos.x) + sq(temp_pos.y) +sq(temp_pos.z));
@@ -205,12 +205,12 @@ void inverse_kinematics(const xyz_pos_t &target) {
   joint_1 = acos(target.x / magnitude_target) - acos(temp_pos.x / magnitude_temp);
   joint_2 = acos(target.y / magnitude_target) - acos(temp_pos.y / magnitude_temp);
   
-  SERIAL_ECHOLNPGM("(IV_K) | Joint Angles is j1:", DEGREES(joint_1),"j2:",  DEGREES(joint_2), " j3:",  DEGREES(joint_3));
+  //SERIAL_ECHOLNPGM("(IV_K) | Joint Angles is j1:", DEGREES(joint_1),"j2:",  DEGREES(joint_2), " j3:",  DEGREES(joint_3));
 
   // STEP 6: Output angles to delta    
   delta.set(angle_to_position(joint_1), angle_to_position(joint_2), angle_to_position(joint_3));
-  SERIAL_ECHOLNPGM("(IV_K) |Position is a:", delta.a,"b:", delta.b, " b:", delta.c);
-  SERIAL_ECHOLNPGM("-------------------------------------");
+  //SERIAL_ECHOLNPGM("(IV_K) |Position is a:", delta.a,"b:", delta.b, " b:", delta.c);
+  //SERIAL_ECHOLNPGM("-------------------------------------");
 }
 
 // Copied and adjusted from another kinematic system
@@ -265,10 +265,10 @@ float position_to_angle(const_float_t position) {       //// WRONG: INNPUT POSIT
   float angle = RADIANS(180 - JOINT_ANGLE_OFFSET) - angle_radians ;
   
   if (position >= 0) {
-    SERIAL_ECHOLNPGM("Angle of steppers is", -angle);
+    //SERIAL_ECHOLNPGM("Angle of steppers is", -angle);
     return -angle;
   } else {
-    SERIAL_ECHOLNPGM("Angle of steppers is", angle);
+    //SERIAL_ECHOLNPGM("Angle of steppers is", angle);
     return angle;
   }
 }
