@@ -981,17 +981,17 @@
   // Radius and distance should be given in mm.
   // Each joint must be defined as {theta, d, a, alpha}
   //                 
-  #define JOINTS { {0,0,0,RADIANS(90)} , {RADIANS(-90),0,0,RADIANS(-90)} , {0,0,100,0}, {0,0,100,0} }
+  #define JOINTS { {RADIANS(0), 0, 0, RADIANS(90)} , {RADIANS(90), 0, 0, RADIANS(90)} , {RADIANS(173.15), -2.4, 800.1, RADIANS(67.46)}, {RADIANS(0), -21.3, 760.3, RADIANS(-67.46)} }
   
   
   // Highly specifc functions for robot I am working on...
   #define JOINT_RADIUS 302.58 / 2 // in mm                  // Used to calculate position & Angle
   #define JOINT_ANGLE_OFFSET  2* 33.6166 // in Degrees      // Used to calculate position & Angle
   #define DISTANCE_OFFSET 252 // in mm                      // Used to calculate position & Angle
-  #define MAX_DISTANCE 200                                  // used to in method position_is_reachable()
-  #define MIN_DISTANCE 185                                  // used to in method position_is_reachable()
-  #define MAX_AXIS_TRAVEL 75                                // used in angle_to_position()
-  #define MIN_AXIS_TRAVEL -75                               // used in angle_to_position()
+  #define MAX_DISTANCE 1550                                  // used to in method position_is_reachable()
+  #define MIN_DISTANCE 1356                                  // used to in method position_is_reachable()
+  #define MAX_AXIS_TRAVEL 50                                // used in angle_to_position()
+  #define MIN_AXIS_TRAVEL -50                               // used in angle_to_position()
 #endif
 
 // For a hot wire cutter with parallel horizontal axes (X, I) where the heights of the two wire
@@ -1863,7 +1863,7 @@
  */
 //#define Z_IDLE_HEIGHT Z_HOME_POS
 
-#define Z_CLEARANCE_FOR_HOMING  -200   // (mm) Minimal Z height before homing (G28) for Z clearance above the bed, clamps, ...
+#define Z_CLEARANCE_FOR_HOMING  -300   // (mm) Minimal Z height before homing (G28) for Z clearance above the bed, clamps, ...
                                       // You'll need this much clearance above Z_MAX_POS to avoid grinding.
 
 //#define Z_AFTER_HOMING         10   // (mm) Height to move to after homing (if Z was homed)
@@ -1980,7 +1980,7 @@
  * RAMPS-based boards use SERVO3_PIN for the first runout sensor.
  * For other boards you may need to define FIL_RUNOUT_PIN, FIL_RUNOUT2_PIN, etc.
  */
-#define FILAMENT_RUNOUT_SENSOR
+//#define FILAMENT_RUNOUT_SENSOR
 #if ENABLED(FILAMENT_RUNOUT_SENSOR)
   #define FIL_RUNOUT_ENABLED_DEFAULT true // Enable the sensor on startup. Override with M412 followed by M500.
   #define NUM_RUNOUT_SENSORS   1          // Number of sensors, up to one per extruder. Define a FIL_RUNOUT#_PIN for each.
@@ -2342,9 +2342,9 @@
 
 // Manually set the home position. Leave these undefined for automatic settings.
 // For DELTA this is the top-center of the Cartesian print volume.
-#define MANUAL_X_HOME_POS 0
-#define MANUAL_Y_HOME_POS 0               /// TO DO: INTEGRATE FORWARD KINEMATIC CALL TO GET HOME POINT
-#define MANUAL_Z_HOME_POS -200
+#define MANUAL_X_HOME_POS -38
+#define MANUAL_Y_HOME_POS -74               /// GET THESE VALUES FROM THE BLENDER MODEL!!!
+#define MANUAL_Z_HOME_POS -1556
 //#define MANUAL_I_HOME_POS 0
 //#define MANUAL_J_HOME_POS 0
 //#define MANUAL_K_HOME_POS 0

@@ -42,18 +42,30 @@ using namespace BLA;
 
 extern float segments_per_second = DEFAULT_SEGMENTS_PER_SECOND;
 
-// Populate array based on JOINTS define in configuration.h
-//constexpr float joint_arr[][4] = JOINTS;
-//const int N_joint = COUNT(joint_arr);
-// Define joints in easy useable form.
-//const DHParameters<N_joint> dh_para_ref = joint_arr;
-
-
 // Custom Homing routine for Robot Arm motors (Homes each axis (only) one after another)
 void home_robot_arm(bool doX, bool doY, bool doZ) {
   // Init the current position of all carriages to 0,0,0
-  current_position.reset();
+  if (doX) {
+    current_position.x = 0;
+  }
+   if (doY) {
+    current_position.y = 0;
+  }
+   if (doZ) {
+    current_position.z = 0;
+  }
+  
   destination.reset();
+  if (!doX) {
+    destination.x = current_position.x;
+  }
+  if (!doY) {
+    destination.x = current_position.y;
+  }
+  if (!doZ) {
+    destination.x = current_position.z;
+  }
+  
   sync_plan_position();
   
   // Disable stealthChop if used. Enable diag1 pin on driver.
@@ -129,7 +141,8 @@ void forward_kinematics(const_float_t pos_m1, const_float_t pos_m2, const_float_
   const float pos_z = temp_matrix(2, 3);
 
   cartes.set(pos_x, pos_y, pos_z);
-  //SERIAL_ECHOLNPGM("Position (FW_K) is x:", pos_x,"Y:", pos_y, " Z:", pos_z);
+  SERIAL_ECHOLNPGM("Position (FW_K) is x:", pos_x,"Y:", pos_y, " Z:", pos_z);
+  SERIAL_ECHOLNPGM("angles (FW_K) is X:", angle_m1," Y:", angle_m2, " Z:", angle_m3);
 }
 
 BLA::Matrix<4,4> dh_transform(JOINT& j) {
