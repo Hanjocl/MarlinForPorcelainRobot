@@ -906,10 +906,10 @@ void report_current_position_projected() {
       // 2. Check if position falls in 45 degree cone from above. If it does -> should be reachable
       const float distance = SQRT(sq(rx) + sq(ry) + sq(rz));
 
-      SERIAL_ECHOLNPGM("Can Reach distance:", distance);
+      SERIAL_ECHOLNPGM("Distance from origin:", distance);
 
       can_reach = (MIN_DISTANCE <= distance) && (distance <= MAX_DISTANCE);      
-      SERIAL_ECHOLNPGM("Can Reach Target:", can_reach);
+      SERIAL_ECHOLNPGM("Can reach target:", can_reach ? "true" : "false");
     
     #elif IS_SCARA
 
@@ -1836,14 +1836,19 @@ float get_move_distance(const xyze_pos_t &diff OPTARG(HAS_ROTATIONAL_AXES, bool 
 
     const xyze_float_t diff = destination - current_position;
 
-    // If the move is only in Z/E don't split up the move
-    if (!diff.x && !diff.y) {
-      planner.buffer_line(destination, scaled_fr_mm_s);
-      return false; // caller will update current_position
-    }
+    // If the move is only in Z/E don't split up the move     ALWAYS SPLIT UP MOVE FOR ROBOT ARM
+    #if DISABLED(ROBOT_ARM)
+      if (!diff.x && !diff.y) {
+        planner.buffer_line(destination, scaled_fr_mm_s);
+        return false; // caller will update current_position
+      }
+    #endif
 
-    // Fail if attempting move outside printable radius
-    if (!position_is_reachable(destination)) return true;
+    // Fail if attempting move outside donut
+    if (!position_is_reachable(destination)) {
+      SERIAL_ECHOLNPGM("ERROR: Destiantion is outside of printable dont!");
+      return true;
+    }
 
     // Get the linear distance in XYZ
     #if HAS_ROTATIONAL_AXES

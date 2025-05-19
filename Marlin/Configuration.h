@@ -974,22 +974,22 @@
 // Articulated robot (arm). Joints are directly mapped to axes with no kinematics.
 #define ROBOT_ARM
 #if ENABLED(ROBOT_ARM)
-  #define DEFAULT_SEGMENTS_PER_SECOND 100
+  #define DEFAULT_SEGMENTS_PER_SECOND 200
   
   // A joint is defined by the DH-parameters. 
   // Angles should be given in degrees. 
   // Radius and distance should be given in mm.
   // Each joint must be defined as {theta, d, a, alpha}
   //                 
-  #define JOINTS { {RADIANS(0), 0, 0, RADIANS(90)} , {RADIANS(90), 0, 0, RADIANS(90)} , {RADIANS(173.15), -2.4, 800.1, RADIANS(67.46)}, {RADIANS(0), -21.3, 760.3, RADIANS(-67.46)} }
+  #define JOINTS { {RADIANS(0), 0, 0, RADIANS(90)} , {RADIANS(90), 0, 0, RADIANS(90)} , {RADIANS(173.15), -2.2, 800.1, RADIANS(67.46)}, {RADIANS(0), -21.3, 760.3, RADIANS(-67.46)} }
   
   
   // Highly specifc functions for robot I am working on...
   #define JOINT_RADIUS 302.58 / 2 // in mm                  // Used to calculate position & Angle
   #define JOINT_ANGLE_OFFSET  2* 33.6166 // in Degrees      // Used to calculate position & Angle
   #define DISTANCE_OFFSET 252 // in mm                      // Used to calculate position & Angle
-  #define MAX_DISTANCE 1550                                  // used to in method position_is_reachable()
-  #define MIN_DISTANCE 1356                                  // used to in method position_is_reachable()
+  #define MAX_DISTANCE 1551                                 // used to in method position_is_reachable(). Maximum distance between origin and end-affector, must be positive!!
+  #define MIN_DISTANCE 1356                                 // used to in method position_is_reachable(). Minimum distance between origin and end-affector, must be positive!!
   #define MAX_AXIS_TRAVEL 50                                // used in angle_to_position()
   #define MIN_AXIS_TRAVEL -50                               // used in angle_to_position()
 #endif
@@ -1353,7 +1353,7 @@
  *   M204 T    Travel Acceleration
  */
 #define DEFAULT_ACCELERATION          4    // X, Y, Z and E acceleration for printing moves
-#define DEFAULT_RETRACT_ACCELERATION  40    // E acceleration for retracts
+#define DEFAULT_RETRACT_ACCELERATION  4    // E acceleration for retracts
 #define DEFAULT_TRAVEL_ACCELERATION   4    // X, Y, Z acceleration for travel (non printing) moves
 
 /**
@@ -1831,7 +1831,7 @@
 // Invert the stepper direction. Change (or reverse the motor connector) if an axis goes the wrong way.
 #define INVERT_X_DIR true
 #define INVERT_Y_DIR true
-#define INVERT_Z_DIR true
+#define INVERT_Z_DIR false
 //#define INVERT_I_DIR false
 //#define INVERT_J_DIR false
 //#define INVERT_K_DIR false
@@ -1905,12 +1905,12 @@
 //#define Y_BED_SIZE X_BED_SIZE
 
 // Travel limits (linear=mm, rotational=°) after homing, corresponding to endstop positions.
-#define X_MIN_POS -200
-#define X_MAX_POS 200
-#define Y_MIN_POS -200
-#define Y_MAX_POS 200
-#define Z_MIN_POS -200
-#define Z_MAX_POS -150
+#define X_MIN_POS -50
+#define X_MAX_POS 50
+#define Y_MIN_POS -50
+#define Y_MAX_POS 50
+#define Z_MIN_POS -MIN_DISTANCE
+#define Z_MAX_POS -MAX_DISTANCE
 //#define I_MIN_POS 0
 //#define I_MAX_POS 50
 //#define J_MIN_POS 0
@@ -2342,9 +2342,9 @@
 
 // Manually set the home position. Leave these undefined for automatic settings.
 // For DELTA this is the top-center of the Cartesian print volume.
-#define MANUAL_X_HOME_POS -38
-#define MANUAL_Y_HOME_POS -74               /// GET THESE VALUES FROM THE BLENDER MODEL!!!
-#define MANUAL_Z_HOME_POS -1556
+#define MANUAL_X_HOME_POS 38
+#define MANUAL_Y_HOME_POS 74               /// GET THESE VALUES FROM THE BLENDER MODEL!!!
+#define MANUAL_Z_HOME_POS -1551
 //#define MANUAL_I_HOME_POS 0
 //#define MANUAL_J_HOME_POS 0
 //#define MANUAL_K_HOME_POS 0

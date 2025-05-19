@@ -2982,7 +2982,7 @@ bool Planner::buffer_line(const xyze_pos_t &cart, const_feedRate_t fr_mm_s
     #endif
 
     // Cartesian XYZ to kinematic ABC, stored in global 'delta'
-    SERIAL_ECHOLNPGM("INVERSE KINEMATICS FLAG");
+    SERIAL_ECHOLNPGM("CALCULATE INVERSE KINEMATICS");
     inverse_kinematics(machine);
 
     PlannerHints ph = hints;

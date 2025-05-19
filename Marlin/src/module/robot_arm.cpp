@@ -167,9 +167,7 @@ BLA::Matrix<4,4> dh_transform(JOINT& j) {
   return T;
 }
 
-/* GOAL: convert raw cartesion XYZ coordinates into 'delta' aka rotation angles for each joint.
-*
-*/
+// Convery cartesian coordinates into movements for the arm.
 void inverse_kinematics(const xyz_pos_t &target) {
   //SERIAL_ECHOLNPGM("-------------------------------------");
   //SERIAL_ECHOLNPGM("(IV_K) |Target is x:", target.x,"Y:", target.y, " Z:", target.z);

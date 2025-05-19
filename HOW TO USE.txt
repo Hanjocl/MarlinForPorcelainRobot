@@ -1,5 +1,7 @@
 1 . Use DH parameter addon for blender to get the right values. -> DOUBLE CHECK ON: https://robotics101-viscircuit.web.app/robotics/dh-model
     -> Add in config.h -> under ENABLED(ROBOT_ARM)
+2. Fill in all other values under ENABLED(ROBOT_ARM)
+    -> Know what the values do before uploading!
 2. Get the end affector positions (relative to the origin empty -> put origin in origin of world!)
     -> Add in config -> Put position in MANUAL_HOME_POS_[AXIS]
 3. DOUBLE CHECK THE CODE BEFORE YOU RUN IT, VERY EXPERIMENTAL!!
