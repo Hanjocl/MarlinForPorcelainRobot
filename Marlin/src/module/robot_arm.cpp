@@ -42,7 +42,8 @@ using namespace BLA;
 
 // Init by settings.load
 float segments_per_second = DEFAULT_SEGMENTS_PER_SECOND;
-xyz_float_t joint_travel_axis_offset;
+xyz_float_t joint_axis_travel_offset;
+xyz_pos_t end_affector_start_position;
 
 // Custom Homing routine for Robot Arm motors (Homes each axis (only) one after another)
 void home_robot_arm(bool doX, bool doY, bool doZ) {
@@ -143,8 +144,6 @@ void forward_kinematics(const_float_t pos_m1, const_float_t pos_m2, const_float_
   const float pos_z = temp_matrix(2, 3);
 
   cartes.set(pos_x, pos_y, pos_z);
-  SERIAL_ECHOLNPGM("Position (FW_K) is x:", pos_x,"Y:", pos_y, " Z:", pos_z);
-  SERIAL_ECHOLNPGM("angles (FW_K) is X:", angle_m1," Y:", angle_m2, " Z:", angle_m3);
 }
 
 BLA::Matrix<4,4> dh_transform(JOINT& j) {
@@ -171,7 +170,7 @@ BLA::Matrix<4,4> dh_transform(JOINT& j) {
 
 // Convery cartesian coordinates into movements for the arm.
 void inverse_kinematics(const xyz_pos_t &target) {
-  SERIAL_ECHOLNPGM("(IV_K) Target destination => x:", target.x,"Y:", target.y, " Z:", target.z);
+  //SERIAL_ECHOLNPGM("  (IV_K) Target destination => x:", target.x,"Y:", target.y, " Z:", target.z);
   
   // Store calculated angle in here
   float joint_1 = 0;
@@ -180,12 +179,12 @@ void inverse_kinematics(const xyz_pos_t &target) {
   
   // STEP 1:  Find distance between org and given point in 3d space: √((x2-x1)^2+(y2-y1)^2+(z2-z1)^2)
   const float distance = SQRT(sq(target.x) + sq(target.y) + sq(target.z));
-  //SERIAL_ECHOLNPGM("(IV_K) | Target Distance is x:", distance);
+  //SERIAL_ECHOLNPGM("  (IV_K) Target Distance => D: ", distance);
 
   // STEP 2:  Get angle for Joint 3
   //          Calculates the angle for given distances
-  float cos_angle = (sq(dh_para_ref.joints[2].a) + sq(dh_para_ref.joints[3].a) - sq(distance)) / (2 * dh_para_ref.joints[2].a* dh_para_ref.joints[3].a);
-  //LIMIT(cos_angle, -1, 1); // Make sure cos is not going out of bound
+  float cos_angle = (sq(dh_para_ref.joints[2].a) + sq(dh_para_ref.joints[3].a) - sq(distance)) / (2 * dh_para_ref.joints[2].a * dh_para_ref.joints[3].a);
+  LIMIT(cos_angle, -1, 1); // Make sure cos is not going out of bound
   joint_3 = RADIANS(180) - ACOS(cos_angle);
 
   //SERIAL_ECHOLNPGM("(IV_K) | Joint 2 a:", dh_para_ref.joints[2].a, "Joint 3 a:",dh_para_ref.joints[3].a);
@@ -217,11 +216,11 @@ void inverse_kinematics(const xyz_pos_t &target) {
   joint_1 = acos(target.x / magnitude_target) - acos(temp_pos.x / magnitude_temp);
   joint_2 = acos(target.y / magnitude_target) - acos(temp_pos.y / magnitude_temp);
   
-  SERIAL_ECHOLNPGM("(IV_K) Joint angles       => j1: ", DEGREES(joint_1)," | j2: ",  DEGREES(joint_2), " | j3: ",  DEGREES(joint_3));
+  //SERIAL_ECHOLNPGM("  (IV_K) Joint angles       => j1: ", DEGREES(joint_1)," | j2: ",  DEGREES(joint_2), " | j3: ",  DEGREES(joint_3));
 
   // STEP 6: Output angles to delta    
-  delta.set(angle_to_position(joint_1, joint_travel_axis_offset.x) , angle_to_position(joint_2, joint_travel_axis_offset.y), angle_to_position(joint_3, joint_travel_axis_offset.z));
-  SERIAL_ECHOLNPGM("(IV_K) Delta Position     => x: ", delta.a," | y: ", delta.b, " | z: ", delta.c);
+  delta.set(angle_to_position(joint_1, joint_axis_travel_offset.x) , angle_to_position(joint_2, joint_axis_travel_offset.y), angle_to_position(joint_3, joint_axis_travel_offset.z));
+  SERIAL_ECHOLNPGM("  (IV_K) Delta Position     => x: ", delta.a," | y: ", delta.b, " | z: ", delta.c);
 }
 
 // Copied and adjusted from another kinematic system
@@ -275,23 +274,25 @@ float angle_to_position(const_float_t joint_angle, const_float_t zero_offset) {
 *  These are highly specific functions. That is only needed for my usecase probably
 *  (Kinda of a post-processor for the inverse kinematics function)
 */ 
-float position_to_angle(const_float_t position) {       //// WRONG: INNPUT POSITION should be the stepper not the x_Axis
-  // Adjust position based on offset at zero
-  float adj_distance = DISTANCE_OFFSET - ABS(position);
+float position_to_angle(const float position) {
+  // Linear displacement from the neutral position
+  float delta = position;
 
-  float angle_radians = 2 * asin(adj_distance / (2 * JOINT_RADIUS));
-  angle_radians = angle_radians * 2;
-  
-  // Adjust the angle by the JOINT_ANGLE_OFFSET and keep what is left over as current angle
-  float angle = RADIANS(180 - JOINT_ANGLE_OFFSET) - angle_radians ;
-  
-  if (position >= 0) {
-    //SERIAL_ECHOLNPGM("Angle of steppers is", -angle);
-    return -angle;
-  } else {
-    //SERIAL_ECHOLNPGM("Angle of steppers is", angle);
-    return angle;
-  }
+  // Chord length for this displacement
+  float chord = DISTANCE_OFFSET + delta;
+
+  // Ensure chord is within domain of asin
+  if (chord > 2 * JOINT_RADIUS) chord = 2 * JOINT_RADIUS;
+  if (chord < 0) chord = 0;
+
+  // Compute central angle from chord length
+  float angle_radians = 2 * asin(chord / (2 * JOINT_RADIUS));
+
+  // Remove the zero-angle offset
+  float zero_offset = 2 * asin(DISTANCE_OFFSET / (2 * JOINT_RADIUS));
+  float angle = angle_radians - zero_offset;
+
+  return angle;
 }
 
 #endif // ROBOT_ARM

@@ -60,7 +60,9 @@ struct DHParameters {
 
 
 extern float segments_per_second;
-extern xyz_float_t joint_travel_axis_offset;
+extern xyz_float_t joint_axis_travel_offset;
+extern xyz_pos_t end_affector_start_position;          // Should replace the manual_home_pos! Used to get the joint_travel_offset
+extern float max_distant;
 
 constexpr float joint_arr[][4] = JOINTS;
 const int N_joint = COUNT(joint_arr);

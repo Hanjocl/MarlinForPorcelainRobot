@@ -369,7 +369,8 @@ typedef struct SettingsDataStruct {
       xy_pos_t draw_area_min, draw_area_max;            // M665 L R T B
       float polargraph_max_belt_len;                    // M665 H
     #elif ENABLED(ROBOT_ARM)
-      xyz_float_t joint_travel_axis_offset;             // CUSTOM NO M-code yet
+      xyz_float_t joint_axis_travel_offset;             // NO M-code yet
+      xyz_pos_t end_affector_start_position;            // NO M-code yet
     #endif
 
   #endif
@@ -1161,6 +1162,9 @@ void MarlinSettings::postprocess() {
         EEPROM_WRITE(draw_area_min);             // 2 floats
         EEPROM_WRITE(draw_area_max);             // 2 floats
         EEPROM_WRITE(polargraph_max_belt_len);   // 1 float
+      #elif ENABLED(ROBOT_ARM)
+        EEPROM_WRITE(joint_axis_travel_offset);
+        EEPROM_WRITE(end_affector_start_position);
       #endif
     }
     #endif
@@ -2253,14 +2257,26 @@ void MarlinSettings::postprocess() {
           EEPROM_READ(draw_area_max);             // 2 floats
           EEPROM_READ(polargraph_max_belt_len);   // 1 float
         #elif ENABLED(ROBOT_ARM)
-          SERIAL_ECHOLNPGM("Calculate position offset for X, Y and Z axis: ");
-          const xyz_float_t init_position =  { MANUAL_X_HOME_POS, MANUAL_Y_HOME_POS, MANUAL_Z_HOME_POS };
-          inverse_kinematics(init_position);
-          joint_travel_axis_offset.x = delta.x;
-          joint_travel_axis_offset.y = delta.y;
-          joint_travel_axis_offset.z = delta.z;
+          _FIELD_TEST(joint_axis_travel_offset);
+          EEPROM_READ(joint_axis_travel_offset); 
+          EEPROM_READ(end_affector_start_position);
 
-          SERIAL_ECHOLNPGM("Offsets => x:", joint_travel_axis_offset.x, " | y;", joint_travel_axis_offset.y, " | z: ", joint_travel_axis_offset.z);
+          SERIAL_ECHOLNPGM("CALC: Forwad kinematics to get end_affector position:");
+          forward_kinematics(0, 0, 0);                                                                  // TEST THIS OTHERWISE REMOVE!
+          end_affector_start_position = cartes;
+          SERIAL_ECHOLNPGM("  (FW_K) => x:", end_affector_start_position.x, " | y;", end_affector_start_position.y, " | z: ", end_affector_start_position.z);
+          
+          current_position = end_affector_start_position;
+
+          SERIAL_ECHOLNPGM("CALC: travel axis offset for X, Y and Z: ");
+          inverse_kinematics(end_affector_start_position);
+          joint_axis_travel_offset.x = delta.x;
+          joint_axis_travel_offset.y = delta.y;
+          joint_axis_travel_offset.z = delta.z;
+
+          SERIAL_ECHOLNPGM("  Offsets => x:", joint_axis_travel_offset.x, " | y;", joint_axis_travel_offset.y, " | z: ", joint_axis_travel_offset.z);
+
+           
         #endif
       }
       #endif
@@ -3490,6 +3506,7 @@ void MarlinSettings::reset() {
 
   #if IS_KINEMATIC
     segments_per_second = DEFAULT_SEGMENTS_PER_SECOND;
+    SERIAL_ECHOLNPGM("DEBUG");
     #if ENABLED(DELTA)
       const abc_float_t adj = DELTA_ENDSTOP_ADJ, dta = DELTA_TOWER_ANGLE_TRIM, ddr = DELTA_DIAGONAL_ROD_TRIM_TOWER;
       delta_height = DELTA_HEIGHT;
@@ -3502,6 +3519,21 @@ void MarlinSettings::reset() {
       draw_area_min.set(X_MIN_POS, Y_MIN_POS);
       draw_area_max.set(X_MAX_POS, Y_MAX_POS);
       polargraph_max_belt_len = POLARGRAPH_MAX_BELT_LEN;
+    #elif ENABLED(ROBOT_ARM)
+      SERIAL_ECHOLNPGM("CALC: Forwad kinematics to get end_affector position:");
+      forward_kinematics(0, 0, 0);                                                                  // TEST THIS OTHERWISE REMOVE!
+      end_affector_start_position = cartes;
+      SERIAL_ECHOLNPGM("  (FW_K) => x:", end_affector_start_position.x, " | y;", end_affector_start_position.y, " | z: ", end_affector_start_position.z);
+      
+      current_position = end_affector_start_position;
+      
+      SERIAL_ECHOLNPGM("CALC: travel axis offset for X, Y and Z: ");
+      inverse_kinematics(end_affector_start_position);
+      joint_axis_travel_offset.x = delta.x;
+      joint_axis_travel_offset.y = delta.y;
+      joint_axis_travel_offset.z = delta.z;
+
+      SERIAL_ECHOLNPGM("  Offsets => x:", joint_axis_travel_offset.x, " | y;", joint_axis_travel_offset.y, " | z: ", joint_axis_travel_offset.z);
     #endif
   #endif
 

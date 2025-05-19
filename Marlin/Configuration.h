@@ -987,7 +987,7 @@
   #define JOINT_RADIUS 302.58 / 2 // in mm                  // Used to calculate position & Angle
   #define JOINT_ANGLE_OFFSET  2* 33.6166 // in Degrees      // Used to calculate position & Angle
   #define DISTANCE_OFFSET 252 // in mm                      // Used to calculate position & Angle
-  #define MAX_DISTANCE 1556                                 // used to in method position_is_reachable(). Maximum distance between origin and end-affector, must be positive!!
+  #define MAX_DISTANCE 1561                                 // used to in method position_is_reachable(). Maximum distance between origin and end-affector, must be positive!!
   #define MIN_DISTANCE 1356                                 // used to in method position_is_reachable(). Minimum distance between origin and end-affector, must be positive!!
   #define MAX_AXIS_TRAVEL 60                                // used in angle_to_position()
   #define MIN_AXIS_TRAVEL -60                               // used in angle_to_position()
@@ -2341,9 +2341,9 @@
 
 // Manually set the home position. Leave these undefined for automatic settings.
 // For DELTA this is the top-center of the Cartesian print volume.
-#define MANUAL_X_HOME_POS 38
-#define MANUAL_Y_HOME_POS 74               /// GET THESE VALUES FROM THE BLENDER MODEL!!!
-#define MANUAL_Z_HOME_POS -1551
+//#define MANUAL_X_HOME_POS 0
+//#define MANUAL_Y_HOME_POS 0               /// THESE VALUES ARE SET IN SETTING.LOAD BY FORWARD KINEMATICS
+//#define MANUAL_Z_HOME_POS 0
 //#define MANUAL_I_HOME_POS 0
 //#define MANUAL_J_HOME_POS 0
 //#define MANUAL_K_HOME_POS 0

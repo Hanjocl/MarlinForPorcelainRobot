@@ -57,8 +57,8 @@ TO-DO LIST
 
 
       inverse_kinematics(current_position);
-      joint_travel_axis_offset.x = delta.x;
-      joint_travel_axis_offset.y = delta.y;
-      joint_travel_axis_offset.z = delta.z;
+      joint_axis_travel_offset.x = delta.x;
+      joint_axis_travel_offset.y = delta.y;
+      joint_axis_travel_offset.z = delta.z;
 
-      SERIAL_ECHOLNPGM("Offsets => x:", joint_travel_axis_offset.x, " | y;", joint_travel_axis_offset.y, " | z: ", joint_travel_axis_offset.z);
+      SERIAL_ECHOLNPGM("Offsets => x:", joint_axis_travel_offset.x, " | y;", joint_axis_travel_offset.y, " | z: ", joint_axis_travel_offset.z);
