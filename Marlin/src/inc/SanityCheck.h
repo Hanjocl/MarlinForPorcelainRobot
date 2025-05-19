@@ -1823,7 +1823,11 @@ static_assert(NUM_SERVOS <= NUM_SERVO_PLUGS, "NUM_SERVOS (or some servo index) i
  * Make sure Z_CLEARANCE_FOR_HOMING is below Z_MAX_POS
  */
 #if HAS_Z_AXIS
-  static_assert(Z_CLEARANCE_FOR_HOMING <= Z_MAX_POS, "Z_CLEARANCE_FOR_HOMING must be less than or equal to Z_MAX_POS.");
+  #warning "This firmware uses a custom homing sequence which does not allow for many homing features! Do NOT change ANY of the setting unless you really know what your are doing."
+  
+  #if DISABLED(ROBOT_ARM)
+    static_assert(Z_CLEARANCE_FOR_HOMING <= Z_MAX_POS, "Z_CLEARANCE_FOR_HOMING must be less than or equal to Z_MAX_POS.");
+  #endif
 #endif
 
 // Check Safe Bed Leveling settings

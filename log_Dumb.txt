@@ -1,0 +1,425 @@
+Connecting...
+ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0018,len:4
+load:0x3fff001c,len:1044
+load:0x40078000,len:8896
+load:0x40080400,len:5828
+entry 0x400806ac
+start
+Printer is now online.
+ External Reset
+ Brown out Reset
+ Watchdog Reset
+Marlin bugfix-2.1.x
+echo: Last Updated: 2025-02-16 | Author: Config by Hanjo Claassen
+echo: Compiled: May 19 2025
+echo: Free Memory: 312860  PlannerBufferBytes: 1600
+echo:V90 stored settings retrieved (550 bytes; crc 52622)
+(IV_K) => j1: 3.1605 | j2: -6.7820 | j3: 10.9936
+(IV_K) => x: -4.7387 | y: 10.3730 | z: -17.2284
+(IV_K) => j1: 3.1605 | j2: -6.7820 | j3: 10.9936
+(IV_K) => x: -4.7387 | y: 10.3730 | z: -17.2284
+ok P15 B4
+>>>  m114
+SENDING:M114
+X:38.0000 Y:74.0000 Z:-1551.0000 Count X:-7582 Y:16597 Z:-27566
+ok P15 B3
+>>> g91
+SENDING:G91
+ok P15 B3
+>>> g0 z10
+SENDING:G0 Z10
+Distance from origin:1543.2437
+Can reach target:true
+Processing segement with inverse kinematics...
+(IV_K) => j1: 3.3292 | j2: -6.7109 | j3: 11.3702
+(IV_K) => x: -4.9957 | y: 10.2601 | z: -17.8570
+Processing segement with inverse kinematics...
+(IV_K) => j1: 3.4924 | j2: -6.6421 | j3: 11.7347
+(IV_K) => x: -5.2449 | y: 10.1508 | z: -18.4679
+Processing segement with inverse kinematics...
+(IV_K) => j1: 3.6508 | j2: -6.5753 | j3: 12.0884
+(IV_K) => x: -5.4871 | y: 10.0448 | z: -19.0629
+Processing segement with inverse kinematics...
+(IV_K) => j1: 3.8046 | j2: -6.5104 | j3: 12.4320
+(IV_K) => x: -5.7228 | y: 9.9419 | z: -19.6429
+Processing segement with inverse kinematics...
+(IV_K) => j1: 3.9542 | j2: -6.4472 | j3: 12.7663
+(IV_K) => x: -5.9526 | y: 9.8419 | z: -20.2095
+Processing segement with inverse kinematics...
+(IV_K) => j1: 4.1000 | j2: -6.3856 | j3: 13.0922
+(IV_K) => x: -6.1769 | y: 9.7444 | z: -20.7635
+Processing segement with inverse kinematics...
+(IV_K) => j1: 4.2423 | j2: -6.3255 | j3: 13.4102
+(IV_K) => x: -6.3961 | y: 9.6493 | z: -21.3059
+Processing segement with inverse kinematics...
+(IV_K) => j1: 4.3813 | j2: -6.2667 | j3: 13.7208
+(IV_K) => x: -6.6106 | y: 9.5565 | z: -21.8375
+Processing segement with inverse kinematics...
+(IV_K) => j1: 4.5171 | j2: -6.2093 | j3: 14.0246
+(IV_K) => x: -6.8207 | y: 9.4658 | z: -22.3590
+Processing segement with inverse kinematics...
+(IV_K) => j1: 4.6501 | j2: -6.1530 | j3: 14.3220
+(IV_K) => x: -7.0267 | y: 9.3770 | z: -22.8711
+Processing segement with inverse kinematics...
+(IV_K) => j1: 4.7804 | j2: -6.0979 | j3: 14.6134
+(IV_K) => x: -7.2287 | y: 9.2901 | z: -23.3744
+Processing segement with inverse kinematics...
+(IV_K) => j1: 4.9081 | j2: -6.0439 | j3: 14.8991
+(IV_K) => x: -7.4271 | y: 9.2049 | z: -23.8693
+Processing segement with inverse kinematics...
+(IV_K) => j1: 5.0334 | j2: -5.9908 | j3: 15.1795
+(IV_K) => x: -7.6221 | y: 9.1213 | z: -24.3563
+Processing segement with inverse kinematics...
+(IV_K) => j1: 5.1565 | j2: -5.9387 | j3: 15.4548
+(IV_K) => x: -7.8138 | y: 9.0393 | z: -24.8359
+Processing segement with inverse kinematics...
+(IV_K) => j1: 5.2773 | j2: -5.8875 | j3: 15.7253
+(IV_K) => x: -8.0025 | y: 8.9587 | z: -25.3084
+Processing segement with inverse kinematics...
+(IV_K) => j1: 5.3962 | j2: -5.8372 | j3: 15.9913
+(IV_K) => x: -8.1881 | y: 8.8795 | z: -25.7741
+Processing segement with inverse kinematics...
+(IV_K) => j1: 5.5130 | j2: -5.7876 | j3: 16.2529
+(IV_K) => x: -8.3710 | y: 8.8017 | z: -26.2335
+Processing segement with inverse kinematics...
+(IV_K) => j1: 5.6281 | j2: -5.7389 | j3: 16.5104
+(IV_K) => x: -8.5512 | y: 8.7251 | z: -26.6868
+Processing segement with inverse kinematics...
+(IV_K) => j1: 5.7413 | j2: -5.6909 | j3: 16.7640
+(IV_K) => x: -8.7289 | y: 8.6498 | z: -27.1343
+Processing segement with inverse kinematics...
+(IV_K) => j1: 5.8528 | j2: -5.6436 | j3: 17.0138
+(IV_K) => x: -8.9042 | y: 8.5756 | z: -27.5762
+ok P0 B2
+>>> g0 z20
+SENDING:G0 Z20
+Distance from origin:1523.2731
+Can reach target:true
+Processing segement with inverse kinematics...
+(IV_K) => j1: 5.9628 | j2: -5.5969 | j3: 17.2601
+(IV_K) => x: -9.0771 | y: 8.5025 | z: -28.0129
+Processing segement with inverse kinematics...
+(IV_K) => j1: 6.0711 | j2: -5.5509 | j3: 17.5029
+(IV_K) => x: -9.2478 | y: 8.4304 | z: -28.4445
+Processing segement with inverse kinematics...
+(IV_K) => j1: 6.1780 | j2: -5.5056 | j3: 17.7424
+(IV_K) => x: -9.4164 | y: 8.3593 | z: -28.8711
+Processing segement with inverse kinematics...
+(IV_K) => j1: 6.2835 | j2: -5.4608 | j3: 17.9788
+(IV_K) => x: -9.5830 | y: 8.2893 | z: -29.2932
+Processing segement with inverse kinematics...
+(IV_K) => j1: 6.3876 | j2: -5.4166 | j3: 18.2121
+(IV_K) => x: -9.7476 | y: 8.2201 | z: -29.7106
+Processing segement with inverse kinematics...
+(IV_K) => j1: 6.4903 | j2: -5.3730 | j3: 18.4425
+(IV_K) => x: -9.9102 | y: 8.1519 | z: -30.1238
+Processing segement with inverse kinematics...
+(IV_K) => j1: 6.5918 | j2: -5.3299 | j3: 18.6700
+(IV_K) => x: -10.0711 | y: 8.0845 | z: -30.5328
+Processing segement with inverse kinematics...
+(IV_K) => j1: 6.6921 | j2: -5.2873 | j3: 18.8949
+(IV_K) => x: -10.2302 | y: 8.0180 | z: -30.9378
+Processing segement with inverse kinematics...
+(IV_K) => j1: 6.7912 | j2: -5.2452 | j3: 19.1171
+(IV_K) => x: -10.3876 | y: 7.9522 | z: -31.3388
+Processing segement with inverse kinematics...
+(IV_K) => j1: 6.8891 | j2: -5.2036 | j3: 19.3368
+(IV_K) => x: -10.5434 | y: 7.8873 | z: -31.7362
+Processing segement with inverse kinematics...
+(IV_K) => j1: 6.9860 | j2: -5.1624 | j3: 19.5540
+(IV_K) => x: -10.6976 | y: 7.8231 | z: -32.1299
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.0817 | j2: -5.1217 | j3: 19.7689
+(IV_K) => x: -10.8502 | y: 7.7596 | z: -32.5200
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.1765 | j2: -5.0814 | j3: 19.9815
+(IV_K) => x: -11.0014 | y: 7.6969 | z: -32.9068
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.2702 | j2: -5.0415 | j3: 20.1919
+(IV_K) => x: -11.1512 | y: 7.6348 | z: -33.2904
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.3630 | j2: -5.0021 | j3: 20.4001
+(IV_K) => x: -11.2995 | y: 7.5733 | z: -33.6707
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.4548 | j2: -4.9630 | j3: 20.6063
+(IV_K) => x: -11.4465 | y: 7.5125 | z: -34.0480
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.5457 | j2: -4.9243 | j3: 20.8104
+(IV_K) => x: -11.5922 | y: 7.4524 | z: -34.4222
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.6358 | j2: -4.8860 | j3: 21.0126
+(IV_K) => x: -11.7367 | y: 7.3928 | z: -34.7935
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.7249 | j2: -4.8481 | j3: 21.2129
+(IV_K) => x: -11.8798 | y: 7.3339 | z: -35.1620
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.8132 | j2: -4.8105 | j3: 21.4113
+(IV_K) => x: -12.0218 | y: 7.2755 | z: -35.5277
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.9008 | j2: -4.7732 | j3: 21.6079
+(IV_K) => x: -12.1626 | y: 7.2176 | z: -35.8907
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.9875 | j2: -4.7363 | j3: 21.8027
+(IV_K) => x: -12.3023 | y: 7.1603 | z: -36.2512
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.0734 | j2: -4.6997 | j3: 21.9959
+(IV_K) => x: -12.4409 | y: 7.1036 | z: -36.6091
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.1586 | j2: -4.6634 | j3: 22.1874
+(IV_K) => x: -12.5784 | y: 7.0473 | z: -36.9645
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.2431 | j2: -4.6275 | j3: 22.3773
+(IV_K) => x: -12.7149 | y: 6.9915 | z: -37.3176
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.3269 | j2: -4.5918 | j3: 22.5656
+(IV_K) => x: -12.8503 | y: 6.9363 | z: -37.6682
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.4100 | j2: -4.5564 | j3: 22.7523
+(IV_K) => x: -12.9848 | y: 6.8815 | z: -38.0166
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.4923 | j2: -4.5213 | j3: 22.9376
+(IV_K) => x: -13.1182 | y: 6.8272 | z: -38.3627
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.5741 | j2: -4.4865 | j3: 23.1214
+(IV_K) => x: -13.2507 | y: 6.7733 | z: -38.7067
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.6551 | j2: -4.4519 | j3: 23.3037
+(IV_K) => x: -13.3823 | y: 6.7198 | z: -39.0485
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.7356 | j2: -4.4176 | j3: 23.4847
+(IV_K) => x: -13.5129 | y: 6.6669 | z: -39.3882
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.8154 | j2: -4.3836 | j3: 23.6643
+(IV_K) => x: -13.6427 | y: 6.6143 | z: -39.7259
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.8946 | j2: -4.3499 | j3: 23.8425
+WARNING: Minimum axis travel reached!
+(IV_K) => x: -13.7716 | y: 6.5621 | z: -40.0000
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.9732 | j2: -4.3163 | j3: 24.0195
+WARNING: Minimum axis travel reached!
+(IV_K) => x: -13.8997 | y: 6.5104 | z: -40.0000
+Processing segement with inverse kinematics...
+(IV_K) => j1: 9.0513 | j2: -4.2830 | j3: 24.1952
+WARNING: Minimum axis travel reached!
+(IV_K) => x: -14.0269 | y: 6.4590 | z: -40.0000
+Processing segement with inverse kinematics...
+(IV_K) => j1: 9.1288 | j2: -4.2500 | j3: 24.3696
+WARNING: Minimum axis travel reached!
+(IV_K) => x: -14.1534 | y: 6.4080 | z: -40.0000
+Processing segement with inverse kinematics...
+(IV_K) => j1: 9.2057 | j2: -4.2172 | j3: 24.5429
+WARNING: Minimum axis travel reached!
+(IV_K) => x: -14.2790 | y: 6.3574 | z: -40.0000
+Processing segement with inverse kinematics...
+(IV_K) => j1: 9.2821 | j2: -4.1846 | j3: 24.7149
+WARNING: Minimum axis travel reached!
+(IV_K) => x: -14.4039 | y: 6.3072 | z: -40.0000
+Processing segement with inverse kinematics...
+(IV_K) => j1: 9.3580 | j2: -4.1522 | j3: 24.8858
+WARNING: Minimum axis travel reached!
+(IV_K) => x: -14.5280 | y: 6.2573 | z: -40.0000
+Processing segement with inverse kinematics...
+(IV_K) => j1: 9.4334 | j2: -4.1201 | j3: 25.0555
+WARNING: Minimum axis travel reached!
+(IV_K) => x: -14.6513 | y: 6.2078 | z: -40.0000
+ok P0 B2
+>>> g0 z-30
+SENDING:G0 Z-30
+Distance from origin:1553.2292
+Can reach target:true
+Processing segement with inverse kinematics...
+(IV_K) => j1: 9.3580 | j2: -4.1522 | j3: 24.8858
+WARNING: Minimum axis travel reached!
+(IV_K) => x: -14.5280 | y: 6.2573 | z: -40.0000
+Processing segement with inverse kinematics...
+(IV_K) => j1: 9.2821 | j2: -4.1846 | j3: 24.7149
+WARNING: Minimum axis travel reached!
+(IV_K) => x: -14.4039 | y: 6.3072 | z: -40.0000
+Processing segement with inverse kinematics...
+(IV_K) => j1: 9.2057 | j2: -4.2172 | j3: 24.5429
+WARNING: Minimum axis travel reached!
+(IV_K) => x: -14.2790 | y: 6.3574 | z: -40.0000
+Processing segement with inverse kinematics...
+(IV_K) => j1: 9.1288 | j2: -4.2500 | j3: 24.3696
+WARNING: Minimum axis travel reached!
+(IV_K) => x: -14.1534 | y: 6.4080 | z: -40.0000
+Processing segement with inverse kinematics...
+(IV_K) => j1: 9.0513 | j2: -4.2830 | j3: 24.1952
+WARNING: Minimum axis travel reached!
+(IV_K) => x: -14.0269 | y: 6.4590 | z: -40.0000
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.9732 | j2: -4.3163 | j3: 24.0195
+WARNING: Minimum axis travel reached!
+(IV_K) => x: -13.8997 | y: 6.5104 | z: -40.0000
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.8946 | j2: -4.3499 | j3: 23.8425
+WARNING: Minimum axis travel reached!
+(IV_K) => x: -13.7716 | y: 6.5621 | z: -40.0000
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.8154 | j2: -4.3836 | j3: 23.6643
+(IV_K) => x: -13.6427 | y: 6.6143 | z: -39.7259
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.7356 | j2: -4.4176 | j3: 23.4847
+(IV_K) => x: -13.5129 | y: 6.6669 | z: -39.3882
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.6551 | j2: -4.4519 | j3: 23.3037
+(IV_K) => x: -13.3823 | y: 6.7198 | z: -39.0485
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.5741 | j2: -4.4865 | j3: 23.1214
+(IV_K) => x: -13.2507 | y: 6.7733 | z: -38.7067
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.4923 | j2: -4.5213 | j3: 22.9376
+(IV_K) => x: -13.1182 | y: 6.8272 | z: -38.3627
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.4100 | j2: -4.5564 | j3: 22.7523
+(IV_K) => x: -12.9848 | y: 6.8815 | z: -38.0166
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.3269 | j2: -4.5918 | j3: 22.5656
+(IV_K) => x: -12.8503 | y: 6.9363 | z: -37.6682
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.2431 | j2: -4.6275 | j3: 22.3773
+(IV_K) => x: -12.7149 | y: 6.9915 | z: -37.3176
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.1586 | j2: -4.6634 | j3: 22.1874
+(IV_K) => x: -12.5784 | y: 7.0473 | z: -36.9645
+Processing segement with inverse kinematics...
+(IV_K) => j1: 8.0734 | j2: -4.6997 | j3: 21.9959
+(IV_K) => x: -12.4409 | y: 7.1036 | z: -36.6091
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.9875 | j2: -4.7363 | j3: 21.8027
+(IV_K) => x: -12.3023 | y: 7.1603 | z: -36.2512
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.9008 | j2: -4.7732 | j3: 21.6079
+(IV_K) => x: -12.1626 | y: 7.2176 | z: -35.8907
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.8132 | j2: -4.8105 | j3: 21.4113
+(IV_K) => x: -12.0218 | y: 7.2755 | z: -35.5277
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.7249 | j2: -4.8481 | j3: 21.2129
+(IV_K) => x: -11.8798 | y: 7.3339 | z: -35.1620
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.6358 | j2: -4.8860 | j3: 21.0126
+(IV_K) => x: -11.7367 | y: 7.3928 | z: -34.7935
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.5457 | j2: -4.9243 | j3: 20.8104
+(IV_K) => x: -11.5922 | y: 7.4524 | z: -34.4222
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.4548 | j2: -4.9630 | j3: 20.6063
+(IV_K) => x: -11.4465 | y: 7.5125 | z: -34.0480
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.3630 | j2: -5.0021 | j3: 20.4001
+(IV_K) => x: -11.2995 | y: 7.5733 | z: -33.6707
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.2702 | j2: -5.0415 | j3: 20.1919
+(IV_K) => x: -11.1512 | y: 7.6348 | z: -33.2904
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.1765 | j2: -5.0814 | j3: 19.9815
+(IV_K) => x: -11.0014 | y: 7.6969 | z: -32.9068
+Processing segement with inverse kinematics...
+(IV_K) => j1: 7.0817 | j2: -5.1217 | j3: 19.7689
+(IV_K) => x: -10.8502 | y: 7.7596 | z: -32.5200
+Processing segement with inverse kinematics...
+(IV_K) => j1: 6.9860 | j2: -5.1624 | j3: 19.5540
+(IV_K) => x: -10.6976 | y: 7.8231 | z: -32.1299
+Processing segement with inverse kinematics...
+(IV_K) => j1: 6.8891 | j2: -5.2036 | j3: 19.3368
+(IV_K) => x: -10.5434 | y: 7.8873 | z: -31.7362
+Processing segement with inverse kinematics...
+(IV_K) => j1: 6.7912 | j2: -5.2452 | j3: 19.1171
+(IV_K) => x: -10.3876 | y: 7.9522 | z: -31.3388
+Processing segement with inverse kinematics...
+(IV_K) => j1: 6.6921 | j2: -5.2873 | j3: 18.8949
+(IV_K) => x: -10.2302 | y: 8.0180 | z: -30.9378
+Processing segement with inverse kinematics...
+(IV_K) => j1: 6.5918 | j2: -5.3299 | j3: 18.6700
+(IV_K) => x: -10.0711 | y: 8.0845 | z: -30.5328
+Processing segement with inverse kinematics...
+(IV_K) => j1: 6.4903 | j2: -5.3730 | j3: 18.4425
+(IV_K) => x: -9.9102 | y: 8.1519 | z: -30.1238
+Processing segement with inverse kinematics...
+(IV_K) => j1: 6.3876 | j2: -5.4166 | j3: 18.2121
+(IV_K) => x: -9.7476 | y: 8.2201 | z: -29.7106
+Processing segement with inverse kinematics...
+(IV_K) => j1: 6.2835 | j2: -5.4608 | j3: 17.9788
+(IV_K) => x: -9.5830 | y: 8.2893 | z: -29.2932
+Processing segement with inverse kinematics...
+(IV_K) => j1: 6.1780 | j2: -5.5056 | j3: 17.7424
+(IV_K) => x: -9.4164 | y: 8.3593 | z: -28.8711
+Processing segement with inverse kinematics...
+(IV_K) => j1: 6.0711 | j2: -5.5509 | j3: 17.5029
+(IV_K) => x: -9.2478 | y: 8.4304 | z: -28.4445
+Processing segement with inverse kinematics...
+(IV_K) => j1: 5.9628 | j2: -5.5969 | j3: 17.2601
+(IV_K) => x: -9.0771 | y: 8.5025 | z: -28.0129
+Processing segement with inverse kinematics...
+(IV_K) => j1: 5.8528 | j2: -5.6436 | j3: 17.0138
+(IV_K) => x: -8.9042 | y: 8.5756 | z: -27.5762
+Processing segement with inverse kinematics...
+(IV_K) => j1: 5.7413 | j2: -5.6909 | j3: 16.7640
+(IV_K) => x: -8.7289 | y: 8.6498 | z: -27.1343
+Processing segement with inverse kinematics...
+(IV_K) => j1: 5.6281 | j2: -5.7389 | j3: 16.5104
+(IV_K) => x: -8.5512 | y: 8.7251 | z: -26.6868
+Processing segement with inverse kinematics...
+(IV_K) => j1: 5.5130 | j2: -5.7876 | j3: 16.2529
+(IV_K) => x: -8.3710 | y: 8.8017 | z: -26.2335
+Processing segement with inverse kinematics...
+(IV_K) => j1: 5.3962 | j2: -5.8372 | j3: 15.9913
+(IV_K) => x: -8.1881 | y: 8.8795 | z: -25.7741
+Processing segement with inverse kinematics...
+(IV_K) => j1: 5.2773 | j2: -5.8875 | j3: 15.7253
+(IV_K) => x: -8.0025 | y: 8.9587 | z: -25.3084
+Processing segement with inverse kinematics...
+(IV_K) => j1: 5.1565 | j2: -5.9387 | j3: 15.4548
+(IV_K) => x: -7.8138 | y: 9.0393 | z: -24.8359
+Processing segement with inverse kinematics...
+(IV_K) => j1: 5.0334 | j2: -5.9908 | j3: 15.1795
+(IV_K) => x: -7.6221 | y: 9.1213 | z: -24.3563
+Processing segement with inverse kinematics...
+(IV_K) => j1: 4.9081 | j2: -6.0439 | j3: 14.8991
+(IV_K) => x: -7.4271 | y: 9.2049 | z: -23.8693
+Processing segement with inverse kinematics...
+(IV_K) => j1: 4.7804 | j2: -6.0979 | j3: 14.6134
+(IV_K) => x: -7.2287 | y: 9.2901 | z: -23.3744
+Processing segement with inverse kinematics...
+(IV_K) => j1: 4.6501 | j2: -6.1530 | j3: 14.3220
+(IV_K) => x: -7.0267 | y: 9.3770 | z: -22.8711
+Processing segement with inverse kinematics...
+(IV_K) => j1: 4.5171 | j2: -6.2093 | j3: 14.0246
+(IV_K) => x: -6.8207 | y: 9.4658 | z: -22.3590
+Processing segement with inverse kinematics...
+(IV_K) => j1: 4.3813 | j2: -6.2667 | j3: 13.7208
+(IV_K) => x: -6.6106 | y: 9.5565 | z: -21.8375
+Processing segement with inverse kinematics...
+(IV_K) => j1: 4.2423 | j2: -6.3255 | j3: 13.4102
+(IV_K) => x: -6.3961 | y: 9.6493 | z: -21.3059
+Processing segement with inverse kinematics...
+(IV_K) => j1: 4.1000 | j2: -6.3856 | j3: 13.0922
+(IV_K) => x: -6.1769 | y: 9.7444 | z: -20.7635
+Processing segement with inverse kinematics...
+(IV_K) => j1: 3.9542 | j2: -6.4472 | j3: 12.7663
+(IV_K) => x: -5.9526 | y: 9.8419 | z: -20.2095
+Processing segement with inverse kinematics...
+(IV_K) => j1: 3.8046 | j2: -6.5104 | j3: 12.4320
+(IV_K) => x: -5.7228 | y: 9.9419 | z: -19.6429
+Processing segement with inverse kinematics...
+(IV_K) => j1: 3.6508 | j2: -6.5753 | j3: 12.0884
+(IV_K) => x: -5.4871 | y: 10.0448 | z: -19.0629
+Processing segement with inverse kinematics...
+(IV_K) => j1: 3.4924 | j2: -6.6421 | j3: 11.7347
+(IV_K) => x: -5.2449 | y: 10.1508 | z: -18.4679
+Processing segement with inverse kinematics...
+(IV_K) => j1: 3.3292 | j2: -6.7109 | j3: 11.3702
+(IV_K) => x: -4.9957 | y: 10.2601 | z: -17.8570
+Processing segement with inverse kinematics...
+(IV_K) => j1: 3.1605 | j2: -6.7820 | j3: 10.9936
+(IV_K) => x: -4.7387 | y: 10.3730 | z: -17.2284
+ok P0 B2
+Disconnected.

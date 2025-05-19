@@ -184,6 +184,10 @@
   #include "../feature/mmu3/mmu3_reporting.h"
 #endif
 
+#if ENABLED(ROBOT_ARM)
+  #include "robot_arm.h"
+#endif
+
 #pragma pack(push, 1) // No padding between variables
 
 #if HAS_ETHERNET
@@ -364,6 +368,8 @@ typedef struct SettingsDataStruct {
     #elif ENABLED(POLARGRAPH)
       xy_pos_t draw_area_min, draw_area_max;            // M665 L R T B
       float polargraph_max_belt_len;                    // M665 H
+    #elif ENABLED(ROBOT_ARM)
+      xyz_float_t joint_travel_axis_offset;             // CUSTOM NO M-code yet
     #endif
 
   #endif
@@ -2246,6 +2252,15 @@ void MarlinSettings::postprocess() {
           EEPROM_READ(draw_area_min);             // 2 floats
           EEPROM_READ(draw_area_max);             // 2 floats
           EEPROM_READ(polargraph_max_belt_len);   // 1 float
+        #elif ENABLED(ROBOT_ARM)
+          SERIAL_ECHOLNPGM("Calculate position offset for X, Y and Z axis: ");
+          const xyz_float_t init_position =  { MANUAL_X_HOME_POS, MANUAL_Y_HOME_POS, MANUAL_Z_HOME_POS };
+          inverse_kinematics(init_position);
+          joint_travel_axis_offset.x = delta.x;
+          joint_travel_axis_offset.y = delta.y;
+          joint_travel_axis_offset.z = delta.z;
+
+          SERIAL_ECHOLNPGM("Offsets => x:", joint_travel_axis_offset.x, " | y;", joint_travel_axis_offset.y, " | z: ", joint_travel_axis_offset.z);
         #endif
       }
       #endif

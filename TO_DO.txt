@@ -32,18 +32,33 @@ TO-DO LIST
         Output: position for the linear actuator
 
 --------------------------------------------------------------------------------------
-[ ] 4. Forward kinematics 
+[X] 4. Forward kinematics 
         Input: Joint angles
         Output: Cartesian Coordiantes 
 
 --------------------------------------------------------------------------------------
-[ ] 5. Inverse kinematics based on cartesian coordinates 
+[X] 5. Inverse kinematics based on cartesian coordinates 
         Input: Cartesian XYZ-coordiantes
         Output: Joint angles
 
 --------------------------------------------------------------------------------------
-[ ] 6. calculate position_is_reachable() for robot arm
+[X] 6. calculate position_is_reachable() for robot arm
         See implementation at code
 
 --------------------------------------------------------------------------------------
+[ ] 7. Add all stuff for reset, save and load in setting.cpp
+        
 
+--------------------------------------------------------------------------------------
+[ ] 8. Fix Z height
+
+
+--------------------------------------------------------------------------------------
+
+
+      inverse_kinematics(current_position);
+      joint_travel_axis_offset.x = delta.x;
+      joint_travel_axis_offset.y = delta.y;
+      joint_travel_axis_offset.z = delta.z;
+
+      SERIAL_ECHOLNPGM("Offsets => x:", joint_travel_axis_offset.x, " | y;", joint_travel_axis_offset.y, " | z: ", joint_travel_axis_offset.z);

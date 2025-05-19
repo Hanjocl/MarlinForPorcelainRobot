@@ -60,6 +60,8 @@ struct DHParameters {
 
 
 extern float segments_per_second;
+extern xyz_float_t joint_travel_axis_offset;
+
 constexpr float joint_arr[][4] = JOINTS;
 const int N_joint = COUNT(joint_arr);
 // Define joints in easy useable form.
@@ -74,5 +76,5 @@ void home_robot_arm(bool doX, bool doY, bool doZ);
 
 void robot_arm_report_positions();
 
-float angle_to_position(const_float_t joint_angle);
+float angle_to_position(const_float_t joint_angle, const_float_t zero_offset);
 float position_to_angle(const_float_t position);

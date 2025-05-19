@@ -979,8 +979,7 @@
   // A joint is defined by the DH-parameters. 
   // Angles should be given in degrees. 
   // Radius and distance should be given in mm.
-  // Each joint must be defined as {theta, d, a, alpha}
-  //                 
+  // Each joint must be defined as {theta, d, a, alpha}                 
   #define JOINTS { {RADIANS(0), 0, 0, RADIANS(90)} , {RADIANS(90), 0, 0, RADIANS(90)} , {RADIANS(173.15), -2.2, 800.1, RADIANS(67.46)}, {RADIANS(0), -21.3, 760.3, RADIANS(-67.46)} }
   
   
@@ -988,10 +987,10 @@
   #define JOINT_RADIUS 302.58 / 2 // in mm                  // Used to calculate position & Angle
   #define JOINT_ANGLE_OFFSET  2* 33.6166 // in Degrees      // Used to calculate position & Angle
   #define DISTANCE_OFFSET 252 // in mm                      // Used to calculate position & Angle
-  #define MAX_DISTANCE 1551                                 // used to in method position_is_reachable(). Maximum distance between origin and end-affector, must be positive!!
+  #define MAX_DISTANCE 1556                                 // used to in method position_is_reachable(). Maximum distance between origin and end-affector, must be positive!!
   #define MIN_DISTANCE 1356                                 // used to in method position_is_reachable(). Minimum distance between origin and end-affector, must be positive!!
-  #define MAX_AXIS_TRAVEL 50                                // used in angle_to_position()
-  #define MIN_AXIS_TRAVEL -50                               // used in angle_to_position()
+  #define MAX_AXIS_TRAVEL 60                                // used in angle_to_position()
+  #define MIN_AXIS_TRAVEL -60                               // used in angle_to_position()
 #endif
 
 // For a hot wire cutter with parallel horizontal axes (X, I) where the heights of the two wire
@@ -1863,7 +1862,7 @@
  */
 //#define Z_IDLE_HEIGHT Z_HOME_POS
 
-#define Z_CLEARANCE_FOR_HOMING  -300   // (mm) Minimal Z height before homing (G28) for Z clearance above the bed, clamps, ...
+//#define Z_CLEARANCE_FOR_HOMING  -300   // (mm) Minimal Z height before homing (G28) for Z clearance above the bed, clamps, ...
                                       // You'll need this much clearance above Z_MAX_POS to avoid grinding.
 
 //#define Z_AFTER_HOMING         10   // (mm) Height to move to after homing (if Z was homed)
@@ -1905,12 +1904,12 @@
 //#define Y_BED_SIZE X_BED_SIZE
 
 // Travel limits (linear=mm, rotational=°) after homing, corresponding to endstop positions.
-#define X_MIN_POS -50
-#define X_MAX_POS 50
-#define Y_MIN_POS -50
-#define Y_MAX_POS 50
-#define Z_MIN_POS -MIN_DISTANCE
-#define Z_MAX_POS -MAX_DISTANCE
+#define X_MIN_POS 0
+#define X_MAX_POS 0
+#define Y_MIN_POS 0
+#define Y_MAX_POS 0                 // THESE VALUE DO NOT WORK WITH THE ROBOT ARM!!!
+#define Z_MIN_POS 0
+#define Z_MAX_POS 0
 //#define I_MIN_POS 0
 //#define I_MAX_POS 50
 //#define J_MIN_POS 0

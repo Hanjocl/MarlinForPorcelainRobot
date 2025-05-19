@@ -40,7 +40,9 @@
 #include "../../lib/BasicLinearAlgebra-master/BasicLinearAlgebra.h"
 using namespace BLA;
 
-extern float segments_per_second = DEFAULT_SEGMENTS_PER_SECOND;
+// Init by settings.load
+float segments_per_second = DEFAULT_SEGMENTS_PER_SECOND;
+xyz_float_t joint_travel_axis_offset;
 
 // Custom Homing routine for Robot Arm motors (Homes each axis (only) one after another)
 void home_robot_arm(bool doX, bool doY, bool doZ) {
@@ -169,8 +171,7 @@ BLA::Matrix<4,4> dh_transform(JOINT& j) {
 
 // Convery cartesian coordinates into movements for the arm.
 void inverse_kinematics(const xyz_pos_t &target) {
-  //SERIAL_ECHOLNPGM("-------------------------------------");
-  //SERIAL_ECHOLNPGM("(IV_K) |Target is x:", target.x,"Y:", target.y, " Z:", target.z);
+  SERIAL_ECHOLNPGM("(IV_K) Target destination => x:", target.x,"Y:", target.y, " Z:", target.z);
   
   // Store calculated angle in here
   float joint_1 = 0;
@@ -189,7 +190,7 @@ void inverse_kinematics(const xyz_pos_t &target) {
 
   //SERIAL_ECHOLNPGM("(IV_K) | Joint 2 a:", dh_para_ref.joints[2].a, "Joint 3 a:",dh_para_ref.joints[3].a);
 
-  // STEP 3:  Do forwared kinematics to get the end position of the arm with only joint 3 turned
+  // STEP 3:  Do forward kinematics to get the end position of the arm with only joint 3 turned
   DHParameters<N_joint> dh_para_cal = dh_para_ref;
   dh_para_cal.joints[3].theta += joint_3;
 
@@ -216,12 +217,11 @@ void inverse_kinematics(const xyz_pos_t &target) {
   joint_1 = acos(target.x / magnitude_target) - acos(temp_pos.x / magnitude_temp);
   joint_2 = acos(target.y / magnitude_target) - acos(temp_pos.y / magnitude_temp);
   
-  //SERIAL_ECHOLNPGM("(IV_K) | Joint Angles is j1:", DEGREES(joint_1),"j2:",  DEGREES(joint_2), " j3:",  DEGREES(joint_3));
+  SERIAL_ECHOLNPGM("(IV_K) Joint angles       => j1: ", DEGREES(joint_1)," | j2: ",  DEGREES(joint_2), " | j3: ",  DEGREES(joint_3));
 
   // STEP 6: Output angles to delta    
-  delta.set(angle_to_position(joint_1), angle_to_position(joint_2), angle_to_position(joint_3));
-  //SERIAL_ECHOLNPGM("(IV_K) |Position is a:", delta.a,"b:", delta.b, " b:", delta.c);
-  //SERIAL_ECHOLNPGM("-------------------------------------");
+  delta.set(angle_to_position(joint_1, joint_travel_axis_offset.x) , angle_to_position(joint_2, joint_travel_axis_offset.y), angle_to_position(joint_3, joint_travel_axis_offset.z));
+  SERIAL_ECHOLNPGM("(IV_K) Delta Position     => x: ", delta.a," | y: ", delta.b, " | z: ", delta.c);
 }
 
 // Copied and adjusted from another kinematic system
@@ -239,7 +239,7 @@ void robot_arm_report_positions() {
 *  These are highly specific functions. That is only needed for my usecase probably
 *  (Kinda of a post-processor for the inverse kinematics)
 */ 
-float angle_to_position(const_float_t joint_angle) { 
+float angle_to_position(const_float_t joint_angle, const_float_t zero_offset) { 
   // Add offsets and get angle that is important
   float angle = ABS(joint_angle) + RADIANS(JOINT_ANGLE_OFFSET);
   angle = RADIANS(180) - angle;
@@ -254,10 +254,20 @@ float angle_to_position(const_float_t joint_angle) {
   } else {
     position = -distance + DISTANCE_OFFSET;
   }
+
+  // Add zero_offset to compensate for difference in porcelain 
+  position -= zero_offset;
+
+  if (position >= MAX_AXIS_TRAVEL) {
+    position = MAX_AXIS_TRAVEL;
+    SERIAL_ECHOLNPGM("WARNING: Maximum axis travel reached!");
+  } else if (position <= MIN_AXIS_TRAVEL) {
+    position = MIN_AXIS_TRAVEL;
+    SERIAL_ECHOLNPGM("WARNING: Minimum axis travel reached!");
+  }
+  
   // Limits travel range to axis max
-  return position > MAX_AXIS_TRAVEL ? MAX_AXIS_TRAVEL :
-         position < MIN_AXIS_TRAVEL ? MIN_AXIS_TRAVEL :
-         position;
+  return position;
 }
 
 /*
