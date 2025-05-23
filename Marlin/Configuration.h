@@ -980,15 +980,15 @@
   // Angles should be given in degrees. 
   // Radius and distance should be given in mm.
   // Each joint must be defined as {theta, d, a, alpha}                 
-  #define JOINTS { {RADIANS(0), 0, 0, RADIANS(90)} , {RADIANS(90), 0, 0, RADIANS(90)} , {RADIANS(173.15), -2.2, 800.1, RADIANS(67.46)}, {RADIANS(0), -21.3, 760.3, RADIANS(-67.46)} }
+  #define JOINTS { {RADIANS(0), 0, 0, RADIANS(90)} , {RADIANS(90), 0, 0, RADIANS(90)} , {RADIANS(187.64), -35.90, 808.58, RADIANS(67.48)}, {RADIANS(-8.64), 136.08, 791.71, RADIANS(0)} }
   
   
   // Highly specifc functions for robot I am working on...
   #define JOINT_RADIUS 302.58 / 2 // in mm                  // Used to calculate position & Angle
   #define JOINT_ANGLE_OFFSET  2* 33.6166 // in Degrees      // Used to calculate position & Angle
   #define DISTANCE_OFFSET 252 // in mm                      // Used to calculate position & Angle
-  #define MAX_DISTANCE 1561                                 // used to in method position_is_reachable(). Maximum distance between origin and end-affector, must be positive!!
-  #define MIN_DISTANCE 1356                                 // used to in method position_is_reachable(). Minimum distance between origin and end-affector, must be positive!!
+  #define MAX_DISTANCE 1604                              // used to in method position_is_reachable(). Maximum distance between origin and end-affector, must be positive!!
+  #define MIN_DISTANCE 1516                              // used to in method position_is_reachable(). Minimum distance between origin and end-affector, must be positive!!
   #define MAX_AXIS_TRAVEL 60                                // used in angle_to_position()
   #define MIN_AXIS_TRAVEL -60                               // used in angle_to_position()
 #endif

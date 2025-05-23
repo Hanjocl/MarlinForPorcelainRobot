@@ -120,6 +120,10 @@ void forward_kinematics(const_float_t pos_m1, const_float_t pos_m2, const_float_
   float angle_m1 = position_to_angle(pos_m1);
   float angle_m2 = position_to_angle(pos_m2);
   float angle_m3 = position_to_angle(pos_m3);
+
+  SERIAL_ECHOLNPGM("(FW_K) angle & pos => Angle:", angle_m1," for pos: ", pos_m1);
+  SERIAL_ECHOLNPGM("(FW_K) angle & pos => Angle:", angle_m2," for pos: ", pos_m2);
+  SERIAL_ECHOLNPGM("(FW_K) angle & pos => Angle:", angle_m3," for pos: ", pos_m3);
   // Get original parameters and create a temporary matrix
   DHParameters<N_joint> dh_para_cal = dh_para_ref;
 
@@ -127,6 +131,10 @@ void forward_kinematics(const_float_t pos_m1, const_float_t pos_m2, const_float_
   dh_para_cal.joints[1].theta += angle_m1;
   dh_para_cal.joints[2].theta += angle_m2;
   dh_para_cal.joints[3].theta += angle_m3;
+  SERIAL_ECHOLNPGM("(FW_K) joint Angle 1:", DEGREES(dh_para_cal.joints[1].theta));
+  SERIAL_ECHOLNPGM("(FW_K) joint Angle 2:", DEGREES(dh_para_cal.joints[2].theta));
+  SERIAL_ECHOLNPGM("(FW_K) joint Angle 3:", DEGREES(dh_para_cal.joints[3].theta));
+
 
   BLA::Matrix<4,4> temp_matrix = {
     1, 0, 0, 0,
@@ -271,7 +279,7 @@ float angle_to_position(const_float_t joint_angle, const_float_t zero_offset) {
 
 /*
 *  Input position of linear actuator and converts it based on parameters to angle of joint.
-*  These are highly specific functions. That is only needed for my usecase probably
+*  These are highly specific functions. That is only needed for my usecase probably. Returns in radians!
 *  (Kinda of a post-processor for the inverse kinematics function)
 */ 
 float position_to_angle(const float position) {
