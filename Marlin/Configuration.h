@@ -982,15 +982,36 @@
   // Each joint must be defined as {theta, d, a, alpha}                 
   #define JOINTS { {RADIANS(0), 0, 0, RADIANS(90)} , {RADIANS(90), 0, 0, RADIANS(90)} , {RADIANS(187.64), -35.90, 808.58, RADIANS(67.48)}, {RADIANS(-8.64), 136.08, 791.71, RADIANS(0)} }
   
-  
-  // Highly specifc functions for robot I am working on...
-  #define JOINT_RADIUS 302.58 / 2 // in mm                  // Used to calculate position & Angle
-  #define JOINT_ANGLE_OFFSET  2* 33.6166 // in Degrees      // Used to calculate position & Angle
-  #define DISTANCE_OFFSET 252 // in mm                      // Used to calculate position & Angle
+  // Max distance able to move
   #define MAX_DISTANCE 1604                              // used to in method position_is_reachable(). Maximum distance between origin and end-affector, must be positive!!
   #define MIN_DISTANCE 1516                              // used to in method position_is_reachable(). Minimum distance between origin and end-affector, must be positive!!
-  #define MAX_AXIS_TRAVEL 60                                // used in angle_to_position()
-  #define MIN_AXIS_TRAVEL -60                               // used in angle_to_position()
+  
+  // Max & Min of trave on an axis
+  #define MAX_AXIS_TRAVEL 60                                // used in axis_z_angle_to_position()
+  #define MIN_AXIS_TRAVEL -60                               // used in axis_z_angle_to_position()
+  
+  // Highly specifc functions for robot I am working on...
+  #define JOINT_ANGLE_OFFSET  2* 33.6166 // in Degrees      // Used to calculate position & Angle
+  #define AXIS_Z_DISTANCE_OFFSET 252 // in mm                      // Used to calculate position & Angle
+  // Z Axis convertion stuff (Used to convert angle to position)
+  #define AXIS_Z_ANGLE_OFFSET_LOW             35.316      // in degrees
+  #define AXIS_Z_ANGLE_OFFSET_HIGH            35.322      // in degrees
+  #define AXIS_Z_D1                           144.874     // in mm        
+  #define AXIS_Z_DEFAULT_LENGTH                           // in mm are configured in the background (only here for transparency reasons)
+
+  // Y Axis convertion stuff (Used to convert angle to position)
+  #define AXIS_Y_ANGLE_OFFSET_LOW             35.32       // in degrees
+  #define AXIS_Y_ANGLE_OFFSET_HIGH            78.321      // in degrees
+  #define AXIS_Y_D1                           122.45      // in mm
+  #define AXIS_Y_D2                           151.32      // in mm
+  #define AXIS_Y_DEFAULT_LENGTH                           // in mm are configured in the background (only here for transparency reasons)
+
+  // X Axis convertion stuff (Used to convert angle to position)
+  #define AXIS_X_ANGLE_OFFSET_LOW             73.417      // in degrees
+  #define AXIS_X_ANGLE_OFFSET_HIGH            51.792      // in degrees
+  #define AXIS_X_D1                           127.0022    // in mm
+  #define AXIS_X_D2                           83.5557     // in mm
+  #define AXIS_X_DEFAULT_LENGTH                           // in mm are configured in the background (only here for transparency reasons) 
 #endif
 
 // For a hot wire cutter with parallel horizontal axes (X, I) where the heights of the two wire

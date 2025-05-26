@@ -371,6 +371,23 @@ typedef struct SettingsDataStruct {
     #elif ENABLED(ROBOT_ARM)
       xyz_float_t joint_axis_travel_offset;             // NO M-code yet
       xyz_pos_t end_affector_start_position;            // NO M-code yet
+
+      float axis_x_angle_offset_low;
+      float axis_x_angle_offset_high;
+      float axis_x_d1;
+      float axis_x_d2;
+      float axis_x_default_length;
+
+      float axis_y_angle_offset_low;
+      float axis_y_angle_offset_high;
+      float axis_y_d1;
+      float axis_y_d2;
+      float axis_y_default_length;
+      
+      float axis_z_angle_offset_low;
+      float axis_z_angle_offset_high;
+      float axis_z_d1;
+      float axis_z_default_length;
     #endif
 
   #endif
@@ -1165,6 +1182,23 @@ void MarlinSettings::postprocess() {
       #elif ENABLED(ROBOT_ARM)
         EEPROM_WRITE(joint_axis_travel_offset);
         EEPROM_WRITE(end_affector_start_position);
+        
+        EEPROM_WRITE(axis_x_angle_offset_low);
+        EEPROM_WRITE(axis_x_angle_offset_high);
+        EEPROM_WRITE(axis_x_d1);
+        EEPROM_WRITE(axis_x_d2);
+        EEPROM_WRITE(axis_x_default_length);
+
+        EEPROM_WRITE(axis_y_angle_offset_low);
+        EEPROM_WRITE(axis_y_angle_offset_high);
+        EEPROM_WRITE(axis_y_d1);
+        EEPROM_WRITE(axis_y_d2);
+        EEPROM_WRITE(axis_y_default_length);
+        
+        EEPROM_WRITE(axis_z_angle_offset_low);
+        EEPROM_WRITE(axis_z_angle_offset_high);
+        EEPROM_WRITE(axis_z_d1);
+        EEPROM_WRITE(axis_z_default_length);
       #endif
     }
     #endif
@@ -2261,6 +2295,23 @@ void MarlinSettings::postprocess() {
           EEPROM_READ(joint_axis_travel_offset); 
           EEPROM_READ(end_affector_start_position);
 
+          EEPROM_READ(axis_x_angle_offset_low);
+          EEPROM_READ(axis_x_angle_offset_high);
+          EEPROM_READ(axis_x_d1);
+          EEPROM_READ(axis_x_d2);
+          EEPROM_READ(axis_x_default_length);
+          
+          EEPROM_READ(axis_y_angle_offset_low);
+          EEPROM_READ(axis_y_angle_offset_high);
+          EEPROM_READ(axis_y_d1);
+          EEPROM_READ(axis_y_d2);
+          EEPROM_READ(axis_y_default_length);
+          
+          EEPROM_READ(axis_z_angle_offset_low);
+          EEPROM_READ(axis_z_angle_offset_high);
+          EEPROM_READ(axis_z_d1);
+          EEPROM_READ(axis_z_default_length);
+          
           SERIAL_ECHOLNPGM("CALC: Forwad kinematics to get end_affector position:");
           forward_kinematics(0, 0, 0);                                                                  // TEST THIS OTHERWISE REMOVE!
           end_affector_start_position = cartes;
@@ -2276,7 +2327,26 @@ void MarlinSettings::postprocess() {
 
           SERIAL_ECHOLNPGM("  Offsets => x:", joint_axis_travel_offset.x, " | y;", joint_axis_travel_offset.y, " | z: ", joint_axis_travel_offset.z);
 
-           
+          // Set all variables for angle to position convertion
+          axis_x_angle_offset_low = RADIANS(AXIS_X_ANGLE_OFFSET_LOW);
+          axis_x_angle_offset_high = RADIANS(AXIS_X_ANGLE_OFFSET_HIGH);
+          axis_x_d1 = AXIS_X_D1;
+          axis_x_d2 = AXIS_X_D2;
+          axis_x_default_length = axis_x_angle_to_position(0,0);
+          
+          axis_y_angle_offset_low = RADIANS(AXIS_Y_ANGLE_OFFSET_LOW);
+          axis_y_angle_offset_high = RADIANS(AXIS_Y_ANGLE_OFFSET_HIGH);
+          axis_y_d1 = AXIS_Y_D1;
+          axis_y_d2 = AXIS_Y_D2;
+          axis_y_default_length = axis_y_angle_to_position(0,0);
+          
+          axis_z_angle_offset_low = RADIANS(AXIS_Z_ANGLE_OFFSET_LOW);;
+          axis_z_angle_offset_high = RADIANS(AXIS_Z_ANGLE_OFFSET_HIGH);;
+          axis_z_d1 = AXIS_Z_D1;
+          axis_z_default_length = axis_z_angle_to_position(0, 0);
+
+          SERIAL_ECHOLNPGM("  Default Lengths => x:", axis_x_default_length, " | y;", axis_y_default_length, " | z: ", axis_z_default_length);
+
         #endif
       }
       #endif
@@ -3534,7 +3604,27 @@ void MarlinSettings::reset() {
       joint_axis_travel_offset.z = delta.z;
 
       SERIAL_ECHOLNPGM("  Offsets => x:", joint_axis_travel_offset.x, " | y;", joint_axis_travel_offset.y, " | z: ", joint_axis_travel_offset.z);
-    #endif
+
+      // Set all variables for angle to position convertion
+      axis_x_angle_offset_low = RADIANS(AXIS_X_ANGLE_OFFSET_LOW);
+      axis_x_angle_offset_high = RADIANS(AXIS_X_ANGLE_OFFSET_HIGH);
+      axis_x_d1 = AXIS_X_D1;
+      axis_x_d2 = AXIS_X_D2;
+      axis_x_default_length = axis_x_angle_to_position(0,0);
+      
+      axis_y_angle_offset_low = RADIANS(AXIS_Y_ANGLE_OFFSET_LOW);
+      axis_y_angle_offset_high = RADIANS(AXIS_Y_ANGLE_OFFSET_HIGH);
+      axis_y_d1 = AXIS_Y_D1;
+      axis_y_d2 = AXIS_Y_D2;
+      axis_y_default_length = axis_y_angle_to_position(0,0);
+      
+      axis_z_angle_offset_low = RADIANS(AXIS_Z_ANGLE_OFFSET_LOW);;
+      axis_z_angle_offset_high = RADIANS(AXIS_Z_ANGLE_OFFSET_HIGH);;
+      axis_z_d1 = AXIS_Z_D1;
+      axis_z_default_length = axis_z_angle_to_position(0, 0);
+
+      SERIAL_ECHOLNPGM("  Default Lengths => x:", axis_x_default_length, " | y;", axis_y_default_length, " | z: ", axis_z_default_length);
+#endif
   #endif
 
   //

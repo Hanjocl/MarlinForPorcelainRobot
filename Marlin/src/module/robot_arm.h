@@ -64,12 +64,30 @@ extern xyz_float_t joint_axis_travel_offset;
 extern xyz_pos_t end_affector_start_position;          // Should replace the manual_home_pos! Used to get the joint_travel_offset
 extern float max_distant;
 
+// Variables for posititon to angle convertion
+extern float axis_z_angle_offset_low;
+extern float axis_z_angle_offset_high;
+extern float axis_z_d1;
+extern float axis_z_default_length ;
+
+extern float axis_y_angle_offset_low;
+extern float axis_y_angle_offset_high;
+extern float axis_y_d1;
+extern float axis_y_d2;
+extern float axis_y_default_length;
+
+extern float axis_x_angle_offset_low;
+extern float axis_x_angle_offset_high;
+extern float axis_x_d1;
+extern float axis_x_d2;
+extern float axis_x_default_length;
+
 constexpr float joint_arr[][4] = JOINTS;
 const int N_joint = COUNT(joint_arr);
 // Define joints in easy useable form.
 const DHParameters<N_joint> dh_para_ref = joint_arr;
 
-void forward_kinematics(const_float_t a, const_float_t b, const_float_t c);
+void forward_kinematics(const_float_t pos_x, const_float_t pos_y, const_float_t pos_z);
 BLA::Matrix<4,4> dh_transform(JOINT& j);
 
 void inverse_kinematics(const xyz_pos_t &raw);
@@ -78,5 +96,10 @@ void home_robot_arm(bool doX, bool doY, bool doZ);
 
 void robot_arm_report_positions();
 
-float angle_to_position(const_float_t joint_angle, const_float_t zero_offset);
-float position_to_angle(const_float_t position);
+float axis_x_angle_to_position(const_float_t angle, const_float_t zero_offset);
+float axis_y_angle_to_position(const_float_t angle, const_float_t zero_offset);
+float axis_z_angle_to_position(const_float_t angle, const_float_t zero_offset);
+
+float axis_x_position_to_angle(const_float_t pos);
+float axis_y_position_to_angle(const_float_t pos);
+float axis_z_position_to_angle(const_float_t pos);

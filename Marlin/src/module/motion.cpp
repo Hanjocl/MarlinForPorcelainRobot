@@ -43,7 +43,7 @@
 #endif
 
 #if ENABLED(ROBOT_ARM)
-  //#include "robot_arm.h"
+  #include "robot_arm.h"
 #endif
 
 #if HAS_BED_PROBE
@@ -176,6 +176,10 @@ xyz_pos_t cartes;
   #else // DELTA
     constexpr float delta_max_radius = PRINTABLE_RADIUS,
                     delta_max_radius_2 = sq(PRINTABLE_RADIUS);
+  #endif
+
+  #if ENABLED(ROBOT_ARM)
+    
   #endif
 
 #endif
