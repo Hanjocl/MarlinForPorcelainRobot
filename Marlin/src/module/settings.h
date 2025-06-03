@@ -71,6 +71,8 @@ class MarlinSettings {
 
       static void first_load() {
         static bool loaded = false;
+        reset();                    // ADDED A RESET ON FIRST LOAD TO GET ALL VALUES
+        save();
         if (!loaded && load()) loaded = true;
       }
 

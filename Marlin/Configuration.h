@@ -980,19 +980,17 @@
   // Angles should be given in degrees. 
   // Radius and distance should be given in mm.
   // Each joint must be defined as {theta, d, a, alpha}                 
-  #define JOINTS { {RADIANS(0), 0, 0, RADIANS(90)} , {RADIANS(90), 0, 0, RADIANS(90)} , {RADIANS(187.64), -35.90, 808.58, RADIANS(67.48)}, {RADIANS(-8.64), 136.08, 791.71, RADIANS(0)} }
+  #define JOINTS { {RADIANS(0), 0, 0, RADIANS(90)} , {RADIANS(90), 0, 0, RADIANS(90)} , {RADIANS(188.93), -48.711, 814.809, RADIANS(66.975)}, {RADIANS(-10), 176.46, 784.546, RADIANS(23.73)} }
   
   // Max distance able to move
-  #define MAX_DISTANCE 1604                              // used to in method position_is_reachable(). Maximum distance between origin and end-affector, must be positive!!
-  #define MIN_DISTANCE 1516                              // used to in method position_is_reachable(). Minimum distance between origin and end-affector, must be positive!!
+  #define MAX_DISTANCE 1606                              // used to in method position_is_reachable(). Maximum distance between origin and end-affector, must be positive!!
+  #define MIN_DISTANCE 1503                              // used to in method position_is_reachable(). Minimum distance between origin and end-affector, must be positive!!
   
   // Max & Min of trave on an axis
   #define MAX_AXIS_TRAVEL 60                                // used in axis_z_angle_to_position()
   #define MIN_AXIS_TRAVEL -60                               // used in axis_z_angle_to_position()
   
   // Highly specifc functions for robot I am working on...
-  #define JOINT_ANGLE_OFFSET  2* 33.6166 // in Degrees      // Used to calculate position & Angle
-  #define AXIS_Z_DISTANCE_OFFSET 252 // in mm                      // Used to calculate position & Angle
   // Z Axis convertion stuff (Used to convert angle to position)
   #define AXIS_Z_ANGLE_OFFSET_LOW             35.316      // in degrees
   #define AXIS_Z_ANGLE_OFFSET_HIGH            35.322      // in degrees
@@ -1344,11 +1342,11 @@
  * Override with M203
  *                                      X, Y, Z [, I [, J [, K...]]], E0 [, E1[, E2...]]
  */
-#define DEFAULT_MAX_FEEDRATE          { 6, 6, 6}
+#define DEFAULT_MAX_FEEDRATE          { 8, 8, 8}
 
 #define LIMITED_MAX_FR_EDITING        // Limit edit via M203 or LCD to DEFAULT_MAX_FEEDRATE * 2
 #if ENABLED(LIMITED_MAX_FR_EDITING)
-  #define MAX_FEEDRATE_EDIT_VALUES    { 8, 8, 8 } // ...or, set your own edit limits
+  #define MAX_FEEDRATE_EDIT_VALUES    { 20, 20, 20 } // ...or, set your own edit limits
 #endif
 
 /**
@@ -1359,9 +1357,9 @@
  */
 #define DEFAULT_MAX_ACCELERATION      {1, 1, 1 }
 
-//#define LIMITED_MAX_ACCEL_EDITING     // Limit edit via M201 or LCD to DEFAULT_MAX_ACCELERATION * 2
+#define LIMITED_MAX_ACCEL_EDITING     // Limit edit via M201 or LCD to DEFAULT_MAX_ACCELERATION * 2
 #if ENABLED(LIMITED_MAX_ACCEL_EDITING)
-  #define MAX_ACCEL_EDIT_VALUES       { 6000, 6000, 200 } // ...or, set your own edit limits
+  #define MAX_ACCEL_EDIT_VALUES       { 4, 4, 4 } // ...or, set your own edit limits
 #endif
 
 /**
@@ -1851,7 +1849,7 @@
 // Invert the stepper direction. Change (or reverse the motor connector) if an axis goes the wrong way.
 #define INVERT_X_DIR true
 #define INVERT_Y_DIR true
-#define INVERT_Z_DIR false
+#define INVERT_Z_DIR true
 //#define INVERT_I_DIR false
 //#define INVERT_J_DIR false
 //#define INVERT_K_DIR false
@@ -2472,7 +2470,7 @@
 #define EEPROM_SETTINGS     // Persistent storage with M500 and M501
 //#define DISABLE_M503        // Saves ~2700 bytes of flash. Disable for release!
 #define EEPROM_CHITCHAT       // Give feedback on EEPROM commands. Disable to save flash.
-#define EEPROM_BOOT_SILENT    // Keep M503 quiet and only give errors during first load
+//#define EEPROM_BOOT_SILENT    // Keep M503 quiet and only give errors during first load
 #if ENABLED(EEPROM_SETTINGS)
   #define EEPROM_AUTO_INIT  // Init EEPROM automatically on any errors.
   #define EEPROM_INIT_NOW   // Init EEPROM on first boot after a new build.

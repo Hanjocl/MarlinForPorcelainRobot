@@ -1295,15 +1295,15 @@
 #if ENABLED(BACKLASH_COMPENSATION)
   // Define values for backlash distance and correction.
   // If BACKLASH_GCODE is enabled these values are the defaults.
-  #define BACKLASH_DISTANCE_MM { 0.10, 0.10, 0.10 } // (linear=mm, rotational=°) One value for each linear axis
-  #define BACKLASH_CORRECTION    0.1       // 0.0 = no correction; 1.0 = full correction
+  #define BACKLASH_DISTANCE_MM { 0, 0, 0 } // (linear=mm, rotational=°) One value for each linear axis
+  #define BACKLASH_CORRECTION   1          // 0.0 = no correction; 1.0 = full correction
 
   // Add steps for motor direction changes on CORE kinematics
   //#define CORE_BACKLASH
 
   // Set BACKLASH_SMOOTHING_MM to spread backlash correction over multiple segments
   // to reduce print artifacts. (Enabling this is costly in memory and computation!)
-  //#define BACKLASH_SMOOTHING_MM 3 // (mm)
+  #define BACKLASH_SMOOTHING_MM 20 // (mm)
 
   // Add runtime configuration and tuning of backlash values (M425)
   #define BACKLASH_GCODE
@@ -3912,8 +3912,8 @@
 /**
  * Extra options for the M114 "Current Position" report
  */
-//#define M114_DETAIL         // Use 'M114` for details to check planner calculations
-//#define M114_REALTIME       // Real current position based on forward kinematics
+#define M114_DETAIL         // Use 'M114` for details to check planner calculations
+#define M114_REALTIME       // Real current position based on forward kinematics
 //#define M114_LEGACY         // M114 used to synchronize on every call. Enable if needed.
 
 /**
@@ -4012,7 +4012,7 @@
  *
  * Execute certain G-code commands immediately after power-on.
  */
-#define STARTUP_COMMANDS "M75"
+#define STARTUP_COMMANDS "M75"  // Start print timer to make sure filament sensor always monitored (is not used in final build probably...)
 
 /**
  * G-code Macros

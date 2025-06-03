@@ -285,6 +285,7 @@
 #define STR_POLAR_SETTINGS                  "Polar"
 #define STR_POLARGRAPH_SETTINGS             "Polargraph"
 #define STR_SCARA_P_T_Z                     "P<theta-psi-offset> T<theta-offset> Z<home-offset>"
+#define STR_ROBOT_ARM                       "Robot Arm"
 #define STR_ENDSTOP_ADJUSTMENT              "Endstop adjustment"
 #define STR_SKEW_FACTOR                     "Skew Factor"
 #define STR_FILAMENT_SETTINGS               "Filament settings"

@@ -22,7 +22,7 @@
 
 #include "../../inc/MarlinConfig.h"
 
-#if IS_KINEMATIC && NOT(ROBOT_ARM)
+#if IS_KINEMATIC
 
 #include "../gcode.h"
 #include "../../module/motion.h"
@@ -207,6 +207,60 @@
     SERIAL_ECHOLNPGM_P(PSTR("  M665 S"), segments_per_second);
   }
 
-#endif // POLAR
+#elif ENABLED(ROBOT_ARM)
 
+  #include "../../module/robot_arm.h"
+
+  /**
+   * M665: Set delta configurations NOT CONFIGURED YET!
+   *
+   *    H =
+   *    L =
+   *    R =
+   *    S =
+   *    X =
+   *    Y =
+   *    Z =
+   *    A =
+   *    B =
+   *    C = 
+   */
+  void GcodeSuite::M665() {
+    if (!parser.seen_any()) return M665_report();
+    /*
+    if (parser.seenval('H')) delta_height              = parser.value_linear_units();
+    if (parser.seenval('L')) delta_diagonal_rod        = parser.value_linear_units();
+    if (parser.seenval('R')) delta_radius              = parser.value_linear_units();
+    if (parser.seenval('S')) segments_per_second       = parser.value_float();
+    if (parser.seenval('X')) delta_tower_angle_trim.a  = parser.value_float();
+    if (parser.seenval('Y')) delta_tower_angle_trim.b  = parser.value_float();
+    if (parser.seenval('Z')) delta_tower_angle_trim.c  = parser.value_float();
+    if (parser.seenval('A')) delta_diagonal_rod_trim.a = parser.value_float();
+    if (parser.seenval('B')) delta_diagonal_rod_trim.b = parser.value_float();
+    if (parser.seenval('C')) delta_diagonal_rod_trim.c = parser.value_float();
+    */
+  }
+
+  void GcodeSuite::M665_report(const bool forReplay/*=true*/) {
+    TERN_(MARLIN_SMALL_BUILD, return);
+
+    report_heading_etc(forReplay, F(STR_ROBOT_ARM));
+    SERIAL_ECHOLNPGM_P(
+        PSTR("\n X offset low = "), DEGREES(axis_x_angle_offset_low)
+      , PSTR("\n X offset high = "), DEGREES(axis_x_angle_offset_high)
+      , PSTR("\n X d1 = "), axis_x_d1
+      , PSTR("\n X d2 = "), axis_x_d2
+      , PSTR("\n X default length = "), axis_x_default_length
+      , PSTR("\n Y offset low= "), DEGREES(axis_y_angle_offset_low)
+      , PSTR("\n Y offset high ="), DEGREES(axis_y_angle_offset_high)
+      , PSTR("\n Y d1 = "), axis_y_d1
+      , PSTR("\n Y d2 = "), axis_y_d2
+      , PSTR("\n Y default length = "), axis_y_default_length
+      , PSTR("\n Z offset low = "), DEGREES(axis_z_angle_offset_low)
+      , PSTR("\n Z offset high = "), DEGREES(axis_z_angle_offset_high)
+      , PSTR("\n Z d1 = "), axis_z_d1
+      , PSTR("\n Z default length = "), axis_z_default_length
+    );
+  }
+#endif // ROBOT_ARM
 #endif // IS_KINEMATIC

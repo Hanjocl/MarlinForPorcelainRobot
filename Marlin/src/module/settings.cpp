@@ -36,7 +36,7 @@
  */
 
 // Change EEPROM version if the structure changes
-#define EEPROM_VERSION "V90"
+#define EEPROM_VERSION "V2"
 #define EEPROM_OFFSET 100
 
 // Check the integrity of data offsets.
@@ -369,9 +369,6 @@ typedef struct SettingsDataStruct {
       xy_pos_t draw_area_min, draw_area_max;            // M665 L R T B
       float polargraph_max_belt_len;                    // M665 H
     #elif ENABLED(ROBOT_ARM)
-      xyz_float_t joint_axis_travel_offset;             // NO M-code yet
-      xyz_pos_t end_affector_start_position;            // NO M-code yet
-
       float axis_x_angle_offset_low;
       float axis_x_angle_offset_high;
       float axis_x_d1;
@@ -388,6 +385,9 @@ typedef struct SettingsDataStruct {
       float axis_z_angle_offset_high;
       float axis_z_d1;
       float axis_z_default_length;
+
+      xyz_pos_t end_affector_start_position;            // NO M-code yet
+      xyz_float_t joint_axis_travel_offset;             // NO M-code yet
     #endif
 
   #endif
@@ -1180,9 +1180,8 @@ void MarlinSettings::postprocess() {
         EEPROM_WRITE(draw_area_max);             // 2 floats
         EEPROM_WRITE(polargraph_max_belt_len);   // 1 float
       #elif ENABLED(ROBOT_ARM)
-        EEPROM_WRITE(joint_axis_travel_offset);
-        EEPROM_WRITE(end_affector_start_position);
-        
+        _FIELD_TEST(axis_x_angle_offset_low);
+
         EEPROM_WRITE(axis_x_angle_offset_low);
         EEPROM_WRITE(axis_x_angle_offset_high);
         EEPROM_WRITE(axis_x_d1);
@@ -1199,6 +1198,9 @@ void MarlinSettings::postprocess() {
         EEPROM_WRITE(axis_z_angle_offset_high);
         EEPROM_WRITE(axis_z_d1);
         EEPROM_WRITE(axis_z_default_length);
+
+        EEPROM_WRITE(end_affector_start_position);        
+        EEPROM_WRITE(joint_axis_travel_offset);
       #endif
     }
     #endif
@@ -2291,9 +2293,7 @@ void MarlinSettings::postprocess() {
           EEPROM_READ(draw_area_max);             // 2 floats
           EEPROM_READ(polargraph_max_belt_len);   // 1 float
         #elif ENABLED(ROBOT_ARM)
-          _FIELD_TEST(joint_axis_travel_offset);
-          EEPROM_READ(joint_axis_travel_offset); 
-          EEPROM_READ(end_affector_start_position);
+          _FIELD_TEST(axis_x_angle_offset_low);
 
           EEPROM_READ(axis_x_angle_offset_low);
           EEPROM_READ(axis_x_angle_offset_high);
@@ -2311,41 +2311,10 @@ void MarlinSettings::postprocess() {
           EEPROM_READ(axis_z_angle_offset_high);
           EEPROM_READ(axis_z_d1);
           EEPROM_READ(axis_z_default_length);
-          
-          SERIAL_ECHOLNPGM("CALC: Forwad kinematics to get end_affector position:");
-          forward_kinematics(0, 0, 0);                                                                  // TEST THIS OTHERWISE REMOVE!
-          end_affector_start_position = cartes;
-          SERIAL_ECHOLNPGM("  (FW_K) => x:", end_affector_start_position.x, " | y;", end_affector_start_position.y, " | z: ", end_affector_start_position.z);
-          
-          current_position = end_affector_start_position;
 
-          SERIAL_ECHOLNPGM("CALC: travel axis offset for X, Y and Z: ");
-          inverse_kinematics(end_affector_start_position);
-          joint_axis_travel_offset.x = delta.x;
-          joint_axis_travel_offset.y = delta.y;
-          joint_axis_travel_offset.z = delta.z;
-
-          SERIAL_ECHOLNPGM("  Offsets => x:", joint_axis_travel_offset.x, " | y;", joint_axis_travel_offset.y, " | z: ", joint_axis_travel_offset.z);
-
-          // Set all variables for angle to position convertion
-          axis_x_angle_offset_low = RADIANS(AXIS_X_ANGLE_OFFSET_LOW);
-          axis_x_angle_offset_high = RADIANS(AXIS_X_ANGLE_OFFSET_HIGH);
-          axis_x_d1 = AXIS_X_D1;
-          axis_x_d2 = AXIS_X_D2;
-          axis_x_default_length = axis_x_angle_to_position(0,0);
-          
-          axis_y_angle_offset_low = RADIANS(AXIS_Y_ANGLE_OFFSET_LOW);
-          axis_y_angle_offset_high = RADIANS(AXIS_Y_ANGLE_OFFSET_HIGH);
-          axis_y_d1 = AXIS_Y_D1;
-          axis_y_d2 = AXIS_Y_D2;
-          axis_y_default_length = axis_y_angle_to_position(0,0);
-          
-          axis_z_angle_offset_low = RADIANS(AXIS_Z_ANGLE_OFFSET_LOW);;
-          axis_z_angle_offset_high = RADIANS(AXIS_Z_ANGLE_OFFSET_HIGH);;
-          axis_z_d1 = AXIS_Z_D1;
-          axis_z_default_length = axis_z_angle_to_position(0, 0);
-
-          SERIAL_ECHOLNPGM("  Default Lengths => x:", axis_x_default_length, " | y;", axis_y_default_length, " | z: ", axis_z_default_length);
+          EEPROM_READ(end_affector_start_position);
+          EEPROM_READ(joint_axis_travel_offset); 
+          SERIAL_ECHOLNPGM(" LOADING EEPROM...");       
 
         #endif
       }
@@ -3576,7 +3545,6 @@ void MarlinSettings::reset() {
 
   #if IS_KINEMATIC
     segments_per_second = DEFAULT_SEGMENTS_PER_SECOND;
-    SERIAL_ECHOLNPGM("DEBUG");
     #if ENABLED(DELTA)
       const abc_float_t adj = DELTA_ENDSTOP_ADJ, dta = DELTA_TOWER_ANGLE_TRIM, ddr = DELTA_DIAGONAL_ROD_TRIM_TOWER;
       delta_height = DELTA_HEIGHT;
@@ -3590,8 +3558,29 @@ void MarlinSettings::reset() {
       draw_area_max.set(X_MAX_POS, Y_MAX_POS);
       polargraph_max_belt_len = POLARGRAPH_MAX_BELT_LEN;
     #elif ENABLED(ROBOT_ARM)
+      SERIAL_ECHOLNPGM(" RESETTING EEPROM...");       
+      // Set all variables for angle to position convertion
+      axis_x_angle_offset_low = RADIANS(AXIS_X_ANGLE_OFFSET_LOW);
+      axis_x_angle_offset_high = RADIANS(AXIS_X_ANGLE_OFFSET_HIGH);
+      axis_x_d1 = AXIS_X_D1;
+      axis_x_d2 = AXIS_X_D2;
+      axis_x_default_length = axis_x_angle_to_position(0);
+      
+      axis_y_angle_offset_low = RADIANS(AXIS_Y_ANGLE_OFFSET_LOW);
+      axis_y_angle_offset_high = RADIANS(AXIS_Y_ANGLE_OFFSET_HIGH);
+      axis_y_d1 = AXIS_Y_D1;
+      axis_y_d2 = AXIS_Y_D2;
+      axis_y_default_length = axis_y_angle_to_position(0);
+      
+      axis_z_angle_offset_low = RADIANS(AXIS_Z_ANGLE_OFFSET_LOW);
+      axis_z_angle_offset_high = RADIANS(AXIS_Z_ANGLE_OFFSET_HIGH);
+      axis_z_d1 = AXIS_Z_D1;
+      axis_z_default_length = axis_z_angle_to_position(0);
+
+      SERIAL_ECHOLNPGM("  Default Lengths => x:", axis_x_default_length, " | y;", axis_y_default_length, " | z: ", axis_z_default_length);
+      
       SERIAL_ECHOLNPGM("CALC: Forwad kinematics to get end_affector position:");
-      forward_kinematics(0, 0, 0);                                                                  // TEST THIS OTHERWISE REMOVE!
+      forward_kinematics(0, 0, 0);
       end_affector_start_position = cartes;
       SERIAL_ECHOLNPGM("  (FW_K) => x:", end_affector_start_position.x, " | y;", end_affector_start_position.y, " | z: ", end_affector_start_position.z);
       
@@ -3604,26 +3593,6 @@ void MarlinSettings::reset() {
       joint_axis_travel_offset.z = delta.z;
 
       SERIAL_ECHOLNPGM("  Offsets => x:", joint_axis_travel_offset.x, " | y;", joint_axis_travel_offset.y, " | z: ", joint_axis_travel_offset.z);
-
-      // Set all variables for angle to position convertion
-      axis_x_angle_offset_low = RADIANS(AXIS_X_ANGLE_OFFSET_LOW);
-      axis_x_angle_offset_high = RADIANS(AXIS_X_ANGLE_OFFSET_HIGH);
-      axis_x_d1 = AXIS_X_D1;
-      axis_x_d2 = AXIS_X_D2;
-      axis_x_default_length = axis_x_angle_to_position(0,0);
-      
-      axis_y_angle_offset_low = RADIANS(AXIS_Y_ANGLE_OFFSET_LOW);
-      axis_y_angle_offset_high = RADIANS(AXIS_Y_ANGLE_OFFSET_HIGH);
-      axis_y_d1 = AXIS_Y_D1;
-      axis_y_d2 = AXIS_Y_D2;
-      axis_y_default_length = axis_y_angle_to_position(0,0);
-      
-      axis_z_angle_offset_low = RADIANS(AXIS_Z_ANGLE_OFFSET_LOW);;
-      axis_z_angle_offset_high = RADIANS(AXIS_Z_ANGLE_OFFSET_HIGH);;
-      axis_z_d1 = AXIS_Z_D1;
-      axis_z_default_length = axis_z_angle_to_position(0, 0);
-
-      SERIAL_ECHOLNPGM("  Default Lengths => x:", axis_x_default_length, " | y;", axis_y_default_length, " | z: ", axis_z_default_length);
 #endif
   #endif
 
@@ -4156,7 +4125,7 @@ void MarlinSettings::reset() {
     //
     // Kinematic Settings
     //
-    #if IS_KINEMATIC && NOT(ROBOT_ARM)
+    #if IS_KINEMATIC
       gcode.M665_report(forReplay)    
     #endif
     

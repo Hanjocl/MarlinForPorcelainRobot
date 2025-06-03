@@ -36,7 +36,6 @@
 #include "endstops.h"
 
 // Custom Imported libraries
-//#include "../../lib/Eigen_Main/Eigen.h"
 #include "../../lib/BasicLinearAlgebra-master/BasicLinearAlgebra.h"
 using namespace BLA;
 
@@ -138,9 +137,9 @@ void forward_kinematics(const_float_t pos_m1, const_float_t pos_m2, const_float_
   float angle_m2 = axis_y_position_to_angle(pos_m2);
   float angle_m3 = axis_z_position_to_angle(pos_m3);
 
-  SERIAL_ECHOLNPGM("(FW_K) angle & pos => Angle:", angle_m1," for pos: ", pos_m1);
-  SERIAL_ECHOLNPGM("(FW_K) angle & pos => Angle:", angle_m2," for pos: ", pos_m2);
-  SERIAL_ECHOLNPGM("(FW_K) angle & pos => Angle:", angle_m3," for pos: ", pos_m3);
+  SERIAL_ECHOLNPGM("(FW_K) angle & pos => Angle 1:", angle_m1," for pos: ", pos_m1);
+  SERIAL_ECHOLNPGM("(FW_K) angle & pos => Angle 2:", angle_m2," for pos: ", pos_m2);
+  SERIAL_ECHOLNPGM("(FW_K) angle & pos => Angle 3:", angle_m3," for pos: ", pos_m3);
   // Get original parameters and create a temporary matrix
   DHParameters<N_joint> dh_para_cal = dh_para_ref;
 
@@ -149,7 +148,7 @@ void forward_kinematics(const_float_t pos_m1, const_float_t pos_m2, const_float_
   dh_para_cal.joints[2].theta += angle_m2;
   dh_para_cal.joints[3].theta += angle_m3;
 
-  SERIAL_ECHOLNPGM("(FW_K) joint Angle 1:", DEGREES(dh_para_cal.joints[1].theta), " | joint Angle 2:", DEGREES(dh_para_cal.joints[2].theta), " | joint Angle 2:", DEGREES(dh_para_cal.joints[3].theta));
+  SERIAL_ECHOLNPGM("(FW_K) joint Angle 1:", DEGREES(dh_para_cal.joints[1].theta), " | joint Angle 2:", DEGREES(dh_para_cal.joints[2].theta), " | joint Angle 3:", DEGREES(dh_para_cal.joints[3].theta));
 
   BLA::Matrix<4,4> temp_matrix = {
     1, 0, 0, 0,
@@ -191,30 +190,41 @@ BLA::Matrix<4,4> dh_transform(JOINT& j) {
   return T;
 }
 
-// Convery cartesian coordinates into movements for the arm.
+// Convery cartesian coordinates into linear actuator position for each joint.
 void inverse_kinematics(const xyz_pos_t &target) {
   //SERIAL_ECHOLNPGM("  (IV_K) Target destination => x:", target.x,"Y:", target.y, " Z:", target.z);
-  
+  DHParameters<N_joint> dh_para_cal = dh_para_ref;
   // Store calculated angle in here
   float joint_1 = 0;
   float joint_2 = 0;
   float joint_3 = 0;
   
-  // STEP 1:  Find distance between org and given point in 3d space: √((x2-x1)^2+(y2-y1)^2+(z2-z1)^2)
-  const float distance = SQRT(sq(target.x) + sq(target.y) + sq(target.z));
-  //SERIAL_ECHOLNPGM("  (IV_K) Target Distance => D: ", distance);
+  // Find distances
+  const float distance_to_target = SQRT(sq(target.x) + sq(target.y) + sq(target.z));
+  const xyz_float_t plane_ref_point = {-48.71,   126.48089413, -804.93247537};           // Calculate at startup!
+  const xyz_float_t plane_normal = {0.39113274, -0.90917865, -0.14286134};           // Calculate at startup!
+  const xyz_float_t origin_on_plane = {-7.45189049, 17.32174043,  2.72180498};           // Calculate at startup!
 
-  // STEP 2:  Get angle for Joint 3
-  //          Calculates the angle for given distances
-  float cos_angle = (sq(dh_para_ref.joints[2].a) + sq(dh_para_ref.joints[3].a) - sq(distance)) / (2 * dh_para_ref.joints[2].a * dh_para_ref.joints[3].a);
-  LIMIT(cos_angle, -1, 1); // Make sure cos is not going out of bound
-  joint_3 = RADIANS(180) - ACOS(cos_angle);
+  const float distance_projected_orgin_to_target =  SQRT(sq(target.x - origin_on_plane.x) + sq(target.y - origin_on_plane.y) + sq(target.z - origin_on_plane.z));
 
-  //SERIAL_ECHOLNPGM("(IV_K) | Joint 2 a:", dh_para_ref.joints[2].a, "Joint 3 a:",dh_para_ref.joints[3].a);
 
+  const float side_b = SQRT(sq(plane_ref_point.x - origin_on_plane.x) + sq(plane_ref_point.y - origin_on_plane.y) + sq(plane_ref_point.z - origin_on_plane.z));
+  const float side_c = SQRT(sq(distance_projected_orgin_to_target) - sq(dh_para_ref.joints[3].d));
+  
+  const float beta = acos(dh_para_ref.joints[2].a / side_b);
+  const float alpha = acos((sq(side_b) + sq(dh_para_ref.joints[3].a) - sq(side_c)) / (2 * side_b * dh_para_ref.joints[3].a));
+  const float angle_z = PI + beta - alpha;
+
+  //SERIAL_ECHOLNPGM("  (IV_K) Distance             => ", distance_to_target);
+  //SERIAL_ECHOLNPGM("  (IV_K) Distance (virtual)   => ", distance_projected_orgin_to_target);
+  //SERIAL_ECHOLNPGM("  (IV_K) Origin point   => ", origin_on_plane.x, ", ", origin_on_plane.y, ", ", origin_on_plane.z, );
+  
   // STEP 3:  Do forward kinematics to get the end position of the arm with only joint 3 turned
-  DHParameters<N_joint> dh_para_cal = dh_para_ref;
-  dh_para_cal.joints[3].theta += joint_3;
+  joint_3 = -1 * (angle_z + dh_para_cal.joints[3].theta);
+  
+  dh_para_cal.joints[3].theta = -angle_z;
+  //SERIAL_ECHOLNPGM("  (IV_K) JOINT 3              => ", DEGREES(dh_para_cal.joints[3].theta));
+  //SERIAL_ECHOLNPGM("  (IV_K) Anlge              => ", DEGREES(angle_z));
 
   BLA::Matrix<4,4> temp_matrix = {
     1, 0, 0, 0,
@@ -228,22 +238,38 @@ void inverse_kinematics(const xyz_pos_t &target) {
   }
 
   // STEP 4:  Get working end position of the arm == temporay vector of arm
-  const xyz_pos_t temp_pos = { temp_matrix(0, 3), temp_matrix(1, 3), temp_matrix(2, 3) };
-  //SERIAL_ECHOLNPGM("(IV_K) | Temp Target is X:", temp_pos[0], " Y:", temp_pos[1], " Z:", temp_pos[2]);
+  const xyz_pos_t end_affector_temp_pos = { temp_matrix(0, 3), temp_matrix(1, 3), temp_matrix(2, 3) };
 
   // STEP 5:  Get vector to rotate X and Y axis based on temp vector and target position
-  const float magnitude_temp = SQRT(sq(temp_pos.x) + sq(temp_pos.y) +sq(temp_pos.z));
+  const float magnitude_end_affector = SQRT(sq(end_affector_temp_pos.x) + sq(end_affector_temp_pos.y) +sq(end_affector_temp_pos.z));
   const float magnitude_target = SQRT(sq(target.x) + sq(target.y) +sq(target.z));
-  
-    // joint angle = Target angle - temporary pos anlge 
-  joint_1 = acos(target.x / magnitude_target) - acos(temp_pos.x / magnitude_temp);
-  joint_2 = acos(target.y / magnitude_target) - acos(temp_pos.y / magnitude_temp);
-  
-  //SERIAL_ECHOLNPGM("  (IV_K) Joint angles       => j1: ", DEGREES(joint_1)," | j2: ",  DEGREES(joint_2), " | j3: ",  DEGREES(joint_3));
 
+  const float alpha_target = acos(target.x / magnitude_target);
+  const float alpha_end_affector = acos(end_affector_temp_pos.x / magnitude_end_affector);
+  
+  const float beta_target = acos(target.y / magnitude_target);
+  const float beta_end_affector = acos(end_affector_temp_pos.y / magnitude_end_affector);
+
+  // joint angle = Target angle - temporary pos anlge 
+  joint_1 -= alpha_target - alpha_end_affector;
+  joint_2 -= beta_target - beta_end_affector;
+ 
+  float delta_a = axis_x_angle_to_position(joint_1);
+  float delta_b = axis_y_angle_to_position(joint_2);
+  float delta_c = axis_z_angle_to_position(joint_3);
+
+  // Limit range of motion
+  LIMIT(delta_a, MIN_AXIS_TRAVEL, MAX_AXIS_TRAVEL);
+  LIMIT(delta_b, MIN_AXIS_TRAVEL, MAX_AXIS_TRAVEL);
+  LIMIT(delta_c, MIN_AXIS_TRAVEL, MAX_AXIS_TRAVEL);
+  
   // STEP 6: Output angles to delta    
-  delta.set(axis_x_angle_to_position(joint_1, joint_axis_travel_offset.x) , axis_y_angle_to_position(joint_2, joint_axis_travel_offset.y), axis_z_angle_to_position(joint_3, joint_axis_travel_offset.z));
-  SERIAL_ECHOLNPGM("  (IV_K) Delta Position     => x: ", delta.a," | y: ", delta.b, " | z: ", delta.c);
+  delta.set(delta_a, delta_b, delta_c);
+
+  //SERIAL_ECHOLNPGM("  (IV_K) Angles   => alpha_target: ", DEGREES(alpha_target), " | alpha_end_affector: ", DEGREES(alpha_end_affector), " | beta_target: ", DEGREES(beta_target), " | beta_end_affector: ", DEGREES(beta_end_affector));
+  
+  //SERIAL_ECHOLNPGM("  (IV_K) Angles Offset   => x: ", DEGREES(joint_1), " | y: ", DEGREES(joint_2), " | z: ", DEGREES(joint_3));
+  //SERIAL_ECHOLNPGM("  (IV_K) Position => x: ", delta.a, " | y: ", delta.b, " | z: ", delta.c);
 }
 
 // Copied and adjusted from another kinematic system
@@ -256,13 +282,12 @@ void robot_arm_report_positions() {
 }
 
 
-/*
-*  Input an angle for a joint and converts it based on parameters to linear actuator position.
-*  These are highly specific functions. That is only needed for my usecase probably
-*  (Kinda of a post-processor for the inverse kinematics)
-*/ 
-float axis_x_angle_to_position(const_float_t joint_angle, const_float_t zero_offset) { 
-  const float gamma = PI - joint_angle;
+/*  Custom formula to convert angle to position for the X axis
+*   INPUT: Angle in rads
+*   OUTPUT: Position in mm
+*/
+float axis_x_angle_to_position(const_float_t angle) { 
+  const float gamma = PI - angle;
 
   const float beta = asin(((axis_x_d1 - axis_x_d2) * sin(gamma)) / axis_x_d1);
 
@@ -272,13 +297,18 @@ float axis_x_angle_to_position(const_float_t joint_angle, const_float_t zero_off
   
   const float length = SQRT(2 * sq(axis_x_d1) * (1 - cos(alpha_3)));
   
-  const float pos = length - axis_x_default_length;
+  float pos = length - axis_x_default_length;
 
   return pos;
 }
 
+/*  Custom formula to convert position to angle for the X axis
+*   INPUT: position in mm
+*   OUTPUT: Angle in rads
+*/
 float axis_x_position_to_angle(const_float_t pos) {
-  const float length = pos - axis_x_default_length;
+  const float length = pos + axis_x_default_length;
+  
 
   const float alpha_3 = acos((2 * sq(axis_x_d1) - sq(length)) / (2 * sq(axis_x_d1)));
 
@@ -286,13 +316,16 @@ float axis_x_position_to_angle(const_float_t pos) {
   
   const float chord = SQRT(sq(axis_x_d1 - axis_x_d2) + sq(axis_x_d1) - 2 * (axis_x_d1 - axis_x_d2) * axis_x_d1 * cos(alpha_1));
 
-  const float angle = asin( (sin(alpha_1) * axis_x_d1) / chord); 
+  const float angle = asin( (sin(alpha_1) * axis_x_d1) / chord);
 
   return angle;
 }
 
-
-float axis_y_angle_to_position(const_float_t angle, const_float_t zero_offset) { 
+/*  Custom formula to convert angle to position for the Y axis
+*   INPUT: Angle in rads
+*   OUTPUT: Position in mm
+*/
+float axis_y_angle_to_position(const_float_t angle) { 
   const float alpha_1 = angle + axis_y_angle_offset_low;
 
   const float beta = asin(((axis_y_d2 - axis_y_d1) * sin(alpha_1)) / axis_y_d1);
@@ -310,6 +343,10 @@ float axis_y_angle_to_position(const_float_t angle, const_float_t zero_offset) {
   return pos;
 }
 
+/*  Custom formula to convert position to angle for the Y axis
+*   INPUT: position in mm
+*   OUTPUT: Angle in rads
+*/
 float axis_y_position_to_angle(const_float_t pos) {
   const float length = pos + axis_y_default_length;
 
@@ -328,27 +365,32 @@ float axis_y_position_to_angle(const_float_t pos) {
   return angle;
 }
 
-
-float axis_z_angle_to_position(const_float_t angle, const_float_t zero_offset) { 
+/*  Custom formula to convert angle to position for the Z axis
+*   INPUT: Angle in rads
+*   OUTPUT: Position in mm
+*/
+float axis_z_angle_to_position(const_float_t angle) { 
   const float alpha_3 = PI - axis_z_angle_offset_low - axis_z_angle_offset_high - angle;
 
   const float length = SQRT(2 * sq(axis_z_d1) * (1 - cos(alpha_3)));
 
-  const float pos = length - axis_z_default_length;
+  float pos = length - axis_z_default_length;
   
   return pos;
 }
 
+/*  Custom formula to convert position to angle for the Z axis
+*   INPUT: position in mm
+*   OUTPUT: Angle in rads
+*/
 float axis_z_position_to_angle(const_float_t pos) {
   const float length = pos + axis_z_default_length;
 
-  const float alpha_3 = acos((2* sq(axis_z_d1) - sq(length) / (2 * sq(axis_z_d1))));
+  const float alpha_3 = acos((2* sq(axis_z_d1) - sq(length)) / (2 * sq(axis_z_d1)));
 
   const float angle = PI - axis_z_angle_offset_low - axis_z_angle_offset_high - alpha_3;
 
   return angle;
 }
-
-
 
 #endif // ROBOT_ARM

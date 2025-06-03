@@ -912,8 +912,9 @@ void report_current_position_projected() {
 
       SERIAL_ECHOLNPGM("Distance from origin:", distance);
 
-      can_reach = (MIN_DISTANCE <= distance) && (distance <= MAX_DISTANCE);      
-      SERIAL_ECHOLNPGM("Can reach target:", can_reach ? "true" : "false");
+      can_reach = (MIN_DISTANCE <= distance) && (distance <= MAX_DISTANCE) && rz <= -500;  // only can reach if is under z < 500mm    
+      SERIAL_ECHOLNPGM("Can reach   => ", can_reach ? "true" : "false");
+      SERIAL_ECHOLNPGM("Target      => ", rx,", ", ry,", ", rz);
     
     #elif IS_SCARA
 
