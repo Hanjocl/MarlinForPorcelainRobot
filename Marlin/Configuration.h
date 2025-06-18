@@ -981,16 +981,13 @@
   // Radius and distance should be given in mm.
   // Each joint must be defined as {theta, d, a, alpha}                 
   #define JOINTS { {RADIANS(0), 0, 0, RADIANS(90)} , {RADIANS(90), 0, 0, RADIANS(90)} , {RADIANS(188.93), -48.711, 814.809, RADIANS(66.975)}, {RADIANS(-10), 176.46, 784.546, RADIANS(23.73)} }
-  // Max distance able to move
-  #define MAX_DISTANCE 1606                              // used to in method position_is_reachable(). Maximum distance between origin and end-affector, must be positive!!
-  #define MIN_DISTANCE 1450                              // used to in method position_is_reachable(). Minimum distance between origin and end-affector, must be positive!!
   
-  #define MAX_ANGLE     45            //Positvely given
+  // Max angle for all joints
+  #define MAX_ANGLE     40            //Positvely given
   // Highly specifc functions for robot I am working on...
   // Max & Min of trave on an axis
-  #define MAX_AXIS_TRAVEL   70                                // used in axis_z_angle_to_position()
+  #define MAX_AXIS_TRAVEL   65                                // used in axis_z_angle_to_position()
   #define MIN_AXIS_TRAVEL   -MAX_AXIS_TRAVEL                  // used in axis_z_angle_to_position()
-  #define DISTANCE_C        19.052                            // Distance from Origin to projected plane 
   
   // Z Axis convertion stuff (Used to convert angle to position)
   #define AXIS_Z_ANGLE_OFFSET_LOW             35.316      // in degrees

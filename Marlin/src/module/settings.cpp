@@ -390,6 +390,7 @@ typedef struct SettingsDataStruct {
       xyz_float_t plane_normal;
       xyz_float_t origin_on_plane;
 
+      float distance_c;
       float min_distance;
       float max_distance;
 
@@ -1211,6 +1212,7 @@ void MarlinSettings::postprocess() {
         EEPROM_WRITE(plane_normal);
         EEPROM_WRITE(origin_on_plane);
 
+        EEPROM_WRITE(distance_c);
         EEPROM_WRITE(min_distance);
         EEPROM_WRITE(max_distance);
 
@@ -2330,9 +2332,11 @@ void MarlinSettings::postprocess() {
           EEPROM_READ(plane_ref_point);
           EEPROM_READ(plane_normal);
           EEPROM_READ(origin_on_plane);
-
+          
+          EEPROM_READ(distance_c);
           EEPROM_READ(min_distance);
           EEPROM_READ(max_distance);
+
 
           EEPROM_READ(end_affector_start_position);
           EEPROM_READ(joint_axis_travel_offset); 
@@ -3615,9 +3619,12 @@ void MarlinSettings::reset() {
       SERIAL_ECHOLNPGM("  plane_ref_point:", plane_ref_point.x, ", ", plane_ref_point.y, ", ", plane_ref_point.z);
       SERIAL_ECHOLNPGM("  plane_normal:", plane_normal.x, ", ", plane_normal.y, ", ", plane_normal.z);
       SERIAL_ECHOLNPGM("  origin_on_plane:", origin_on_plane.x, ", ", origin_on_plane.y, ", ", origin_on_plane.z);
-
+      
+      distance_c = SQRT(sq(origin_on_plane.x) + sq(origin_on_plane.y) + sq(origin_on_plane.z));
+      SERIAL_ECHOLNPGM("  distance_c:", distance_c);
+      
       SERIAL_ECHOLNPGM("CALC: Max & Min distance distance");
-      const float max_deviation = -1 * _MIN(ABS(axis_z_angle_to_position(-MAX_ANGLE)) , _MAX(MAX_AXIS_TRAVEL, ABS(MIN_AXIS_TRAVEL)));
+      const float max_deviation = -1 * _MIN(ABS(axis_z_angle_to_position(MAX_ANGLE)) , _MAX(MAX_AXIS_TRAVEL, ABS(MIN_AXIS_TRAVEL)));
       forward_kinematics(0,0, max_deviation);
       min_distance = sqrt(sq(cartes.x) + sq(cartes.y) + sq(cartes.z));
       forward_kinematics(0, 0, 0);

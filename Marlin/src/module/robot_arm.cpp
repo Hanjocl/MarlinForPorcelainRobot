@@ -44,7 +44,7 @@ float segments_per_second = DEFAULT_SEGMENTS_PER_SECOND;
 xyz_float_t joint_axis_travel_offset;
 xyz_pos_t end_affector_start_position;
 
-float distance_c = DISTANCE_C;
+float distance_c;
 float max_distance;
 float min_distance;
 xyz_float_t plane_ref_point;
@@ -144,9 +144,9 @@ void forward_kinematics(const_float_t pos_m1, const_float_t pos_m2, const_float_
   float angle_m2 = axis_y_position_to_angle(pos_m2);
   float angle_m3 = axis_z_position_to_angle(pos_m3);
 
-  SERIAL_ECHOLNPGM("(FW_K) angle & pos => Angle 1:", DEGREES(angle_m1)," for pos: ", pos_m1);
-  SERIAL_ECHOLNPGM("(FW_K) angle & pos => Angle 2:", DEGREES(angle_m2)," for pos: ", pos_m2);
-  SERIAL_ECHOLNPGM("(FW_K) angle & pos => Angle 3:", DEGREES(angle_m3)," for pos: ", pos_m3);
+  SERIAL_ECHOLNPGM("(FW_K) Joint 1 => Angle: ", DEGREES(angle_m1)," | pos: ", pos_m1);
+  SERIAL_ECHOLNPGM("(FW_K) Joint 1 => Angle: ", DEGREES(angle_m2)," | pos: ", pos_m2);
+  SERIAL_ECHOLNPGM("(FW_K) Joint 1 => Angle: ", DEGREES(angle_m3)," | pos: ", pos_m3);
   // Get original parameters and create a temporary matrix
   DHParameters<N_joint> dh_para_cal = dh_para_ref;
 
@@ -217,7 +217,7 @@ void inverse_kinematics(const xyz_pos_t &target) {
   
   
   const float side_b = SQRT(sq(plane_ref_point.x - origin_on_plane.x) + sq(plane_ref_point.y - origin_on_plane.y) + sq(plane_ref_point.z - origin_on_plane.z));
-  const float side_c = SQRT(sq(distance_projected_orgin_to_target) - sq(dh_para_ref.joints[3].d));
+  const float side_c = SQRT(sq(distance_projected_orgin_to_target) - sq(dh_para_ref.joints[3].d - distance_c));
   
   const float beta = acos(dh_para_ref.joints[2].a / side_b);
   const float alpha = acos((sq(side_b) + sq(dh_para_ref.joints[3].a) - sq(side_c)) / (2 * side_b * dh_para_ref.joints[3].a));
