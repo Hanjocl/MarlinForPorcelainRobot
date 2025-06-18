@@ -62,7 +62,7 @@
 
 // Author info of this build printed to the host during boot and M115
 #define STRING_CONFIG_H_AUTHOR "Config by Hanjo Claassen" // Original author or contributor.
-#define CUSTOM_VERSION_FILE Version 0.1 // Path from the root directory (no quotes)
+#define CUSTOM_VERSION_FILE Version 1.0 // Path from the root directory (no quotes)
 
 // @section machine
 
