@@ -44,6 +44,13 @@ float segments_per_second = DEFAULT_SEGMENTS_PER_SECOND;
 xyz_float_t joint_axis_travel_offset;
 xyz_pos_t end_affector_start_position;
 
+float distance_c = DISTANCE_C;
+float max_distance;
+float min_distance;
+xyz_float_t plane_ref_point;
+xyz_float_t plane_normal;
+xyz_float_t origin_on_plane;   
+
 float axis_z_angle_offset_low;
 float axis_z_angle_offset_high;
 float axis_z_d1;
@@ -137,16 +144,16 @@ void forward_kinematics(const_float_t pos_m1, const_float_t pos_m2, const_float_
   float angle_m2 = axis_y_position_to_angle(pos_m2);
   float angle_m3 = axis_z_position_to_angle(pos_m3);
 
-  SERIAL_ECHOLNPGM("(FW_K) angle & pos => Angle 1:", angle_m1," for pos: ", pos_m1);
-  SERIAL_ECHOLNPGM("(FW_K) angle & pos => Angle 2:", angle_m2," for pos: ", pos_m2);
-  SERIAL_ECHOLNPGM("(FW_K) angle & pos => Angle 3:", angle_m3," for pos: ", pos_m3);
+  SERIAL_ECHOLNPGM("(FW_K) angle & pos => Angle 1:", DEGREES(angle_m1)," for pos: ", pos_m1);
+  SERIAL_ECHOLNPGM("(FW_K) angle & pos => Angle 2:", DEGREES(angle_m2)," for pos: ", pos_m2);
+  SERIAL_ECHOLNPGM("(FW_K) angle & pos => Angle 3:", DEGREES(angle_m3)," for pos: ", pos_m3);
   // Get original parameters and create a temporary matrix
   DHParameters<N_joint> dh_para_cal = dh_para_ref;
 
   // Add angle values to joints
-  dh_para_cal.joints[1].theta += angle_m1;
-  dh_para_cal.joints[2].theta += angle_m2;
-  dh_para_cal.joints[3].theta += angle_m3;
+  dh_para_cal.joints[1].theta -= angle_m1;
+  dh_para_cal.joints[2].theta -= angle_m2;
+  dh_para_cal.joints[3].theta -= angle_m3;
 
   SERIAL_ECHOLNPGM("(FW_K) joint Angle 1:", DEGREES(dh_para_cal.joints[1].theta), " | joint Angle 2:", DEGREES(dh_para_cal.joints[2].theta), " | joint Angle 3:", DEGREES(dh_para_cal.joints[3].theta));
 
@@ -201,13 +208,14 @@ void inverse_kinematics(const xyz_pos_t &target) {
   
   // Find distances
   const float distance_to_target = SQRT(sq(target.x) + sq(target.y) + sq(target.z));
-  const xyz_float_t plane_ref_point = {-48.71,   126.48089413, -804.93247537};           // Calculate at startup!
-  const xyz_float_t plane_normal = {0.39113274, -0.90917865, -0.14286134};           // Calculate at startup!
-  const xyz_float_t origin_on_plane = {-7.45189049, 17.32174043,  2.72180498};           // Calculate at startup!
+  //const xyz_float_t plane_ref_point = {-48.71,   126.48089413, -804.93247537};           // Calculate at startup!
+  //const xyz_float_t plane_normal = {0.39113274, -0.90917865, -0.14286134};           // Calculate at startup!
+  //const xyz_float_t origin_on_plane = {-7.45189049, 17.32174043,  2.72180498};           // Calculate at startup!
 
+  
   const float distance_projected_orgin_to_target =  SQRT(sq(target.x - origin_on_plane.x) + sq(target.y - origin_on_plane.y) + sq(target.z - origin_on_plane.z));
-
-
+  
+  
   const float side_b = SQRT(sq(plane_ref_point.x - origin_on_plane.x) + sq(plane_ref_point.y - origin_on_plane.y) + sq(plane_ref_point.z - origin_on_plane.z));
   const float side_c = SQRT(sq(distance_projected_orgin_to_target) - sq(dh_para_ref.joints[3].d));
   
@@ -392,5 +400,33 @@ float axis_z_position_to_angle(const_float_t pos) {
 
   return angle;
 }
+
+// Project a point onto a plane defined by a point and a normal (all as xyz_float_t)
+xyz_float_t project_point_to_plane(const xyz_float_t &point, const xyz_float_t &plane_point, const xyz_float_t &plane_normal) {
+  // Convert to BLA::Matrix<3> for math
+  BLA::Matrix<3> p = {point.x, point.y, point.z};
+  BLA::Matrix<3> pp = {plane_point.x, plane_point.y, plane_point.z};
+  BLA::Matrix<3> n = {plane_normal.x, plane_normal.y, plane_normal.z};
+  n = n / Norm(n);
+  BLA::Matrix<3> v = p - pp;
+  float distance = v(0)*n(0) + v(1)*n(1) + v(2)*n(2);
+  BLA::Matrix<3> proj = p - distance * n;
+  return xyz_float_t{proj(0), proj(1), proj(2)};
+}
+
+// Helper: Compute the transformation matrix up to (and including) a given joint index
+BLA::Matrix<4,4> dh_transform_up_to(const DHParameters<N_joint>& dh_params, int joint_idx) {
+  BLA::Matrix<4,4> T = {
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+  };
+  for (int i = 0; i <= joint_idx && i < N_joint; ++i) {
+    T *= dh_transform(const_cast<JOINT&>(dh_params.joints[i]));
+  }
+  return T;
+}
+
 
 #endif // ROBOT_ARM

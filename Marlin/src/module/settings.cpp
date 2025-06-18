@@ -386,6 +386,13 @@ typedef struct SettingsDataStruct {
       float axis_z_d1;
       float axis_z_default_length;
 
+      xyz_float_t plane_ref_point;
+      xyz_float_t plane_normal;
+      xyz_float_t origin_on_plane;
+
+      float min_distance;
+      float max_distance;
+
       xyz_pos_t end_affector_start_position;            // NO M-code yet
       xyz_float_t joint_axis_travel_offset;             // NO M-code yet
     #endif
@@ -1198,6 +1205,14 @@ void MarlinSettings::postprocess() {
         EEPROM_WRITE(axis_z_angle_offset_high);
         EEPROM_WRITE(axis_z_d1);
         EEPROM_WRITE(axis_z_default_length);
+
+
+        EEPROM_WRITE(plane_ref_point);
+        EEPROM_WRITE(plane_normal);
+        EEPROM_WRITE(origin_on_plane);
+
+        EEPROM_WRITE(min_distance);
+        EEPROM_WRITE(max_distance);
 
         EEPROM_WRITE(end_affector_start_position);        
         EEPROM_WRITE(joint_axis_travel_offset);
@@ -2311,6 +2326,13 @@ void MarlinSettings::postprocess() {
           EEPROM_READ(axis_z_angle_offset_high);
           EEPROM_READ(axis_z_d1);
           EEPROM_READ(axis_z_default_length);
+
+          EEPROM_READ(plane_ref_point);
+          EEPROM_READ(plane_normal);
+          EEPROM_READ(origin_on_plane);
+
+          EEPROM_READ(min_distance);
+          EEPROM_READ(max_distance);
 
           EEPROM_READ(end_affector_start_position);
           EEPROM_READ(joint_axis_travel_offset); 
@@ -3576,15 +3598,36 @@ void MarlinSettings::reset() {
       axis_z_angle_offset_high = RADIANS(AXIS_Z_ANGLE_OFFSET_HIGH);
       axis_z_d1 = AXIS_Z_D1;
       axis_z_default_length = axis_z_angle_to_position(0);
-
       SERIAL_ECHOLNPGM("  Default Lengths => x:", axis_x_default_length, " | y;", axis_y_default_length, " | z: ", axis_z_default_length);
       
-      SERIAL_ECHOLNPGM("CALC: Forwad kinematics to get end_affector position:");
+      SERIAL_ECHOLNPGM("CALC: Normale plane, point at joint 3");
+      BLA::Matrix<4,4> point_fw = dh_transform_up_to(dh_para_ref, 2);
+      plane_ref_point.x = point_fw(0, 3);
+      plane_ref_point.y = point_fw(1, 3);
+      plane_ref_point.z = point_fw(2, 3);
+
+      plane_normal.x = point_fw(0, 2);
+      plane_normal.y = point_fw(1, 2);
+      plane_normal.z = point_fw(2, 2);
+      const xyz_float_t origin = {0, 0, 0};
+
+      origin_on_plane = project_point_to_plane(origin, plane_ref_point, plane_normal);
+      SERIAL_ECHOLNPGM("  plane_ref_point:", plane_ref_point.x, ", ", plane_ref_point.y, ", ", plane_ref_point.z);
+      SERIAL_ECHOLNPGM("  plane_normal:", plane_normal.x, ", ", plane_normal.y, ", ", plane_normal.z);
+      SERIAL_ECHOLNPGM("  origin_on_plane:", origin_on_plane.x, ", ", origin_on_plane.y, ", ", origin_on_plane.z);
+
+      SERIAL_ECHOLNPGM("CALC: Max & Min distance distance");
+      const float max_deviation = -1 * _MIN(ABS(axis_z_angle_to_position(-MAX_ANGLE)) , _MAX(MAX_AXIS_TRAVEL, ABS(MIN_AXIS_TRAVEL)));
+      forward_kinematics(0,0, max_deviation);
+      min_distance = sqrt(sq(cartes.x) + sq(cartes.y) + sq(cartes.z));
       forward_kinematics(0, 0, 0);
+      max_distance = sqrt(sq(cartes.x) + sq(cartes.y) + sq(cartes.z));
+      SERIAL_ECHOLNPGM("  Distances => min_distance:", min_distance, " | max_distance;", max_distance , "| max_deviation:",max_deviation);
+
+      SERIAL_ECHOLNPGM("CALC: Default End Effector Position");
       end_affector_start_position = cartes;
-      SERIAL_ECHOLNPGM("  (FW_K) => x:", end_affector_start_position.x, " | y;", end_affector_start_position.y, " | z: ", end_affector_start_position.z);
-      
       current_position = end_affector_start_position;
+      SERIAL_ECHOLNPGM("  (FW_K) => x:", end_affector_start_position.x, " | y;", end_affector_start_position.y, " | z: ", end_affector_start_position.z);
       
       SERIAL_ECHOLNPGM("CALC: travel axis offset for X, Y and Z: ");
       inverse_kinematics(end_affector_start_position);

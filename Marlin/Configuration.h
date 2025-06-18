@@ -981,16 +981,17 @@
   // Radius and distance should be given in mm.
   // Each joint must be defined as {theta, d, a, alpha}                 
   #define JOINTS { {RADIANS(0), 0, 0, RADIANS(90)} , {RADIANS(90), 0, 0, RADIANS(90)} , {RADIANS(188.93), -48.711, 814.809, RADIANS(66.975)}, {RADIANS(-10), 176.46, 784.546, RADIANS(23.73)} }
-  
   // Max distance able to move
   #define MAX_DISTANCE 1606                              // used to in method position_is_reachable(). Maximum distance between origin and end-affector, must be positive!!
-  #define MIN_DISTANCE 1503                              // used to in method position_is_reachable(). Minimum distance between origin and end-affector, must be positive!!
+  #define MIN_DISTANCE 1450                              // used to in method position_is_reachable(). Minimum distance between origin and end-affector, must be positive!!
   
-  // Max & Min of trave on an axis
-  #define MAX_AXIS_TRAVEL 60                                // used in axis_z_angle_to_position()
-  #define MIN_AXIS_TRAVEL -60                               // used in axis_z_angle_to_position()
-  
+  #define MAX_ANGLE     45            //Positvely given
   // Highly specifc functions for robot I am working on...
+  // Max & Min of trave on an axis
+  #define MAX_AXIS_TRAVEL   70                                // used in axis_z_angle_to_position()
+  #define MIN_AXIS_TRAVEL   -MAX_AXIS_TRAVEL                  // used in axis_z_angle_to_position()
+  #define DISTANCE_C        19.052                            // Distance from Origin to projected plane 
+  
   // Z Axis convertion stuff (Used to convert angle to position)
   #define AXIS_Z_ANGLE_OFFSET_LOW             35.316      // in degrees
   #define AXIS_Z_ANGLE_OFFSET_HIGH            35.322      // in degrees
@@ -1346,7 +1347,7 @@
 
 #define LIMITED_MAX_FR_EDITING        // Limit edit via M203 or LCD to DEFAULT_MAX_FEEDRATE * 2
 #if ENABLED(LIMITED_MAX_FR_EDITING)
-  #define MAX_FEEDRATE_EDIT_VALUES    { 20, 20, 20 } // ...or, set your own edit limits
+  #define MAX_FEEDRATE_EDIT_VALUES    { 8*5, 8*5, 8*5 } // ...or, set your own edit limits
 #endif
 
 /**
@@ -1355,11 +1356,11 @@
  * Override with M201
  *                                      X, Y, Z [, I [, J [, K...]]], E0 [, E1[, E2...]]
  */
-#define DEFAULT_MAX_ACCELERATION      {1, 1, 1 }
+#define DEFAULT_MAX_ACCELERATION      {4, 4, 4 }
 
 #define LIMITED_MAX_ACCEL_EDITING     // Limit edit via M201 or LCD to DEFAULT_MAX_ACCELERATION * 2
 #if ENABLED(LIMITED_MAX_ACCEL_EDITING)
-  #define MAX_ACCEL_EDIT_VALUES       { 4, 4, 4 } // ...or, set your own edit limits
+  #define MAX_ACCEL_EDIT_VALUES       { 12, 12, 12 } // ...or, set your own edit limits
 #endif
 
 /**
@@ -1370,9 +1371,9 @@
  *   M204 R    Retract Acceleration
  *   M204 T    Travel Acceleration
  */
-#define DEFAULT_ACCELERATION          4    // X, Y, Z and E acceleration for printing moves
-#define DEFAULT_RETRACT_ACCELERATION  4    // E acceleration for retracts
-#define DEFAULT_TRAVEL_ACCELERATION   4    // X, Y, Z acceleration for travel (non printing) moves
+#define DEFAULT_ACCELERATION          8    // X, Y, Z and E acceleration for printing moves
+#define DEFAULT_RETRACT_ACCELERATION  8    // E acceleration for retracts
+#define DEFAULT_TRAVEL_ACCELERATION   8    // X, Y, Z acceleration for travel (non printing) moves
 
 /**
  * Default Jerk limits (mm/s)

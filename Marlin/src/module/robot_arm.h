@@ -61,8 +61,13 @@ struct DHParameters {
 
 extern float segments_per_second;
 extern xyz_float_t joint_axis_travel_offset;
-extern xyz_pos_t end_affector_start_position;          // Should replace the manual_home_pos! Used to get the joint_travel_offset
-extern float max_distant;                              // TO be implemented... now set manual in configuration.h
+extern xyz_pos_t end_affector_start_position;           // Should replace the manual_home_pos! Used to get the joint_travel_offset
+extern float max_distance;                               // TO be implemented... now set manual in configuration.h
+extern float min_distance;                               // TO be implemented... now set manual in configuration.h
+extern float distance_c;                                // TO be implemented... now set manual in configuration.h
+extern xyz_float_t plane_ref_point;                      // Calculate at startup!
+extern xyz_float_t plane_normal;                         // Calculate at startup!
+extern xyz_float_t origin_on_plane;                      // Calculate at startup! 
 
 // Variables for posititon to angle convertion
 extern float axis_z_angle_offset_low;
@@ -101,3 +106,6 @@ float axis_z_angle_to_position(const_float_t angle);
 float axis_x_position_to_angle(const_float_t pos);
 float axis_y_position_to_angle(const_float_t pos);
 float axis_z_position_to_angle(const_float_t pos);
+
+BLA::Matrix<4,4> dh_transform_up_to(const DHParameters<N_joint>& dh_params, int joint_idx);
+xyz_float_t project_point_to_plane(const xyz_float_t &point, const xyz_float_t &plane_point, const xyz_float_t &plane_normal);

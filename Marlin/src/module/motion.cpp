@@ -912,7 +912,7 @@ void report_current_position_projected() {
 
       SERIAL_ECHOLNPGM("Distance from origin:", distance);
 
-      can_reach = (MIN_DISTANCE <= distance) && (distance <= MAX_DISTANCE) && rz <= -500;  // only can reach if is under z < 500mm    
+      can_reach = (min_distance < distance) && (distance < max_distance) && rz <= -500;  // Very crude check, should be cone line shape check instead    
       SERIAL_ECHOLNPGM("Can reach   => ", can_reach ? "true" : "false");
       SERIAL_ECHOLNPGM("Target      => ", rx,", ", ry,", ", rz);
     
