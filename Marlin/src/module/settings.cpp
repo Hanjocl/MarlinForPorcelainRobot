@@ -4176,6 +4176,18 @@ void MarlinSettings::reset() {
     // Kinematic Settings
     //
     #if IS_KINEMATIC
+      SERIAL_ECHOLNPGM_P(PSTR("\n// Each joint must be defined as {theta, d, a, alpha}"));
+      
+      for (int i = 0; i < N_joint; i++) {
+        SERIAL_ECHOLNPGM_P(
+            PSTR("\nJoint "), i
+          , PSTR("\n  theta = "), DEGREES(joint_arr[i][0])
+          , PSTR("\n  d     = "), joint_arr[i][1]
+          , PSTR("\n  a     = "), joint_arr[i][2]
+          , PSTR("\n  alpha = "), DEGREES(joint_arr[i][3])
+        );
+      }
+
       gcode.M665_report(forReplay)    
     #endif
     

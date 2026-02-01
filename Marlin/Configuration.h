@@ -31,7 +31,7 @@
  * - Printer geometry
  * - Endstop configuration
  * - LCD controller
- * - Extra features
+ * - Extra featuresa
  *
  * Advanced settings can be found in Configuration_adv.h
  */
@@ -62,7 +62,7 @@
 
 // Author info of this build printed to the host during boot and M115
 #define STRING_CONFIG_H_AUTHOR "Config by Hanjo Claassen" // Original author or contributor.
-#define CUSTOM_VERSION_FILE Version 1.0 // Path from the root directory (no quotes)
+#define CUSTOM_VERSION_FILE Version 1.5 // Path from the root directory (no quotes)
 
 // @section machine
 
@@ -980,13 +980,15 @@
   // Angles should be given in degrees. 
   // Radius and distance should be given in mm.
   // Each joint must be defined as {theta, d, a, alpha}                 
-  #define JOINTS { {RADIANS(0), 0, 0, RADIANS(90)} , {RADIANS(90), 0, 0, RADIANS(90)} , {RADIANS(188.93), -48.711, 814.809, RADIANS(66.975)}, {RADIANS(-10), 176.46, 784.546, RADIANS(23.73)} }
+  //#define JOINTS { {RADIANS(0), 0, 0, RADIANS(90)} , {RADIANS(90), 0, 0, RADIANS(90)} , {RADIANS(178.03), 19.066, 815.184, RADIANS(61.40)}, {RADIANS(-5.15), 61.383, 781.0, RADIANS(30)} } // Robot A
+  //#define JOINTS { {RADIANS(0), 0, 0, RADIANS(90)} , {RADIANS(90), 0, 0, RADIANS(90)} , {RADIANS(188.93), -48.711, 814.809, RADIANS(66.975)}, {RADIANS(-10), 176.46, 784.546, RADIANS(23.73)} } // Robot B
+  #define JOINTS { {RADIANS(0), 0, 0, RADIANS(90)} , {RADIANS(90), 0, 0, RADIANS(90)} , {RADIANS(184.66), -2.37, 797.40, RADIANS(82.82)}, {RADIANS(0.123), -0.94, 765.904, RADIANS(7.73)} } // Robot C
   
   // Max angle for all joints
-  #define MAX_ANGLE     40            //Positvely given
+  #define MAX_ANGLE     45            //Positvely given
   // Highly specifc functions for robot I am working on...
   // Max & Min of trave on an axis
-  #define MAX_AXIS_TRAVEL   65                                // used in axis_z_angle_to_position()
+  #define MAX_AXIS_TRAVEL   70                                // used in axis_z_angle_to_position()
   #define MIN_AXIS_TRAVEL   -MAX_AXIS_TRAVEL                  // used in axis_z_angle_to_position()
   
   // Z Axis convertion stuff (Used to convert angle to position)
